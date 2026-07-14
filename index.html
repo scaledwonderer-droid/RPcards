@@ -901,84 +901,163 @@
     function drawFlourish(theme) {
       const { colors } = theme;
       ctx.save();
-      ctx.strokeStyle = colors.gold;
+
+      const goldGradient = ctx.createLinearGradient(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+      goldGradient.addColorStop(0, colors.goldDark);
+      goldGradient.addColorStop(0.42, colors.goldLight);
+      goldGradient.addColorStop(0.72, colors.gold);
+      goldGradient.addColorStop(1, colors.goldDark);
+
+      ctx.strokeStyle = goldGradient;
       ctx.fillStyle = colors.goldLight;
-      ctx.lineWidth = 2;
-      ctx.globalAlpha = 0.72;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.lineWidth = 3.6;
+      ctx.globalAlpha = 0.94;
+      ctx.shadowColor = "rgba(228, 200, 117, 0.42)";
+      ctx.shadowBlur = 9;
 
       const corners = [
-        { x: 45, y: 54, sx: 1, sy: 1 },
-        { x: 855, y: 54, sx: -1, sy: 1 },
-        { x: 45, y: 1446, sx: 1, sy: -1 },
-        { x: 855, y: 1446, sx: -1, sy: -1 }
+        { x: 45, y: 48, sx: 1, sy: 1 },
+        { x: 855, y: 48, sx: -1, sy: 1 },
+        { x: 45, y: 1452, sx: 1, sy: -1 },
+        { x: 855, y: 1452, sx: -1, sy: -1 }
       ];
 
       corners.forEach(({ x, y, sx, sy }) => {
         ctx.save();
         ctx.translate(x, y);
         ctx.scale(sx, sy);
+
         ctx.beginPath();
-        ctx.moveTo(0, 38);
-        ctx.bezierCurveTo(9, 13, 31, 4, 58, 0);
-        ctx.bezierCurveTo(34, 12, 24, 28, 19, 54);
+        ctx.moveTo(0, 62);
+        ctx.bezierCurveTo(12, 24, 42, 5, 92, 0);
+        ctx.bezierCurveTo(54, 17, 37, 42, 31, 79);
         ctx.stroke();
+
         ctx.beginPath();
-        ctx.moveTo(15, 22);
-        ctx.bezierCurveTo(35, 16, 48, 22, 60, 39);
+        ctx.moveTo(15, 40);
+        ctx.bezierCurveTo(40, 25, 68, 31, 88, 62);
+        ctx.bezierCurveTo(67, 50, 50, 54, 39, 75);
         ctx.stroke();
+
         ctx.beginPath();
-        ctx.arc(17, 22, 3, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.moveTo(30, 23);
+        ctx.bezierCurveTo(43, 9, 61, 8, 73, 18);
+        ctx.stroke();
+
+        [[19, 39, 4], [39, 22, 3.5], [67, 19, 3]].forEach(([cx, cy, r]) => {
+          ctx.beginPath();
+          ctx.arc(cx, cy, r, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
         ctx.restore();
       });
 
-      ctx.globalAlpha = 0.42;
-      ctx.beginPath();
-      ctx.moveTo(210, 1070);
-      ctx.bezierCurveTo(300, 1048, 365, 1090, 450, 1068);
-      ctx.bezierCurveTo(535, 1048, 610, 1092, 690, 1070);
-      ctx.stroke();
+      const drawDivider = (y, flip = 1) => {
+        ctx.save();
+        ctx.globalAlpha = 0.82;
+        ctx.lineWidth = 2.8;
+        ctx.beginPath();
+        ctx.moveTo(190, y);
+        ctx.bezierCurveTo(290, y - 18 * flip, 360, y + 15 * flip, 438, y);
+        ctx.bezierCurveTo(360, y - 15 * flip, 290, y + 18 * flip, 218, y + 1 * flip);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(710, y);
+        ctx.bezierCurveTo(610, y - 18 * flip, 540, y + 15 * flip, 462, y);
+        ctx.bezierCurveTo(540, y - 15 * flip, 610, y + 18 * flip, 682, y + 1 * flip);
+        ctx.stroke();
+
+        ctx.save();
+        ctx.translate(450, y);
+        ctx.rotate(Math.PI / 4);
+        ctx.fillRect(-6, -6, 12, 12);
+        ctx.restore();
+        ctx.restore();
+      };
+
+      drawDivider(132, 1);
+      drawDivider(1071, -1);
       ctx.restore();
     }
 
     function drawChandelier(theme) {
       const { colors } = theme;
-      ctx.save();
-      ctx.translate(450, 42);
-      ctx.strokeStyle = colors.goldLight;
-      ctx.fillStyle = colors.goldLight;
-      ctx.lineWidth = 2;
-      ctx.globalAlpha = 0.65;
 
-      ctx.beginPath();
-      ctx.moveTo(0, -18);
-      ctx.lineTo(0, 32);
-      ctx.stroke();
+      function drawPendant(x, y, scale, mirror = 1) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.scale(scale * mirror, scale);
+        ctx.strokeStyle = colors.goldLight;
+        ctx.fillStyle = colors.goldLight;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.lineWidth = 3.2;
+        ctx.globalAlpha = 0.9;
+        ctx.shadowColor = "rgba(228, 200, 117, 0.5)";
+        ctx.shadowBlur = 10;
 
-      ctx.beginPath();
-      ctx.arc(0, 36, 7, 0, Math.PI * 2);
-      ctx.stroke();
-
-      [-92, -46, 0, 46, 92].forEach((x, index) => {
-        const y = 58 + Math.abs(index - 2) * 8;
         ctx.beginPath();
-        ctx.moveTo(0, 40);
-        ctx.quadraticCurveTo(x * 0.55, y - 18, x, y);
+        ctx.moveTo(0, -48);
+        ctx.lineTo(0, -10);
         ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(x, y);
-        ctx.lineTo(x, y + 28);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.arc(x, y + 33, 5, 0, Math.PI * 2);
-        ctx.fill();
-      });
 
-      const sparkles = [
-        [-154, 42, 8], [142, 74, 6], [-122, 108, 5], [171, 120, 9], [102, 22, 4]
-      ];
-      sparkles.forEach(([x, y, r]) => drawSparkle(x, y, r, colors.goldLight, 0.7));
-      ctx.restore();
+        ctx.beginPath();
+        ctx.arc(0, -2, 8, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(-58, 24);
+        ctx.bezierCurveTo(-47, -2, -24, -1, 0, 18);
+        ctx.bezierCurveTo(24, -1, 47, -2, 58, 24);
+        ctx.stroke();
+
+        [-58, -30, 0, 30, 58].forEach((armX, index) => {
+          const stemY = index === 2 ? 9 : 18;
+          ctx.beginPath();
+          ctx.moveTo(armX, stemY);
+          ctx.lineTo(armX, 46);
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.moveTo(armX - 9, 47);
+          ctx.lineTo(armX + 9, 47);
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.moveTo(armX, 43);
+          ctx.bezierCurveTo(armX - 7, 34, armX - 5, 27, armX, 23);
+          ctx.bezierCurveTo(armX + 5, 27, armX + 7, 34, armX, 43);
+          ctx.fill();
+        });
+
+        [-44, -16, 16, 44].forEach((crystalX, index) => {
+          const topY = 30 + (index % 2) * 8;
+          ctx.beginPath();
+          ctx.moveTo(crystalX, topY);
+          ctx.lineTo(crystalX, 69);
+          ctx.stroke();
+
+          ctx.save();
+          ctx.translate(crystalX, 76);
+          ctx.rotate(Math.PI / 4);
+          ctx.fillRect(-5, -5, 10, 10);
+          ctx.restore();
+        });
+
+        ctx.restore();
+      }
+
+      drawPendant(126, 212, 0.82, 1);
+      drawPendant(774, 212, 0.82, -1);
+
+      [
+        [214, 188, 11], [686, 184, 9], [94, 324, 7], [808, 330, 8],
+        [172, 280, 5], [728, 286, 5]
+      ].forEach(([x, y, radius]) => drawSparkle(x, y, radius, colors.goldLight, 0.88));
     }
 
     function drawSparkle(x, y, radius, color, alpha = 1) {
@@ -986,12 +1065,18 @@
       ctx.translate(x, y);
       ctx.strokeStyle = color;
       ctx.globalAlpha = alpha;
-      ctx.lineWidth = 1.5;
+      ctx.lineWidth = 2;
+      ctx.shadowColor = "rgba(228, 200, 117, 0.55)";
+      ctx.shadowBlur = 8;
       ctx.beginPath();
       ctx.moveTo(-radius, 0);
       ctx.lineTo(radius, 0);
       ctx.moveTo(0, -radius);
       ctx.lineTo(0, radius);
+      ctx.moveTo(-radius * 0.55, -radius * 0.55);
+      ctx.lineTo(radius * 0.55, radius * 0.55);
+      ctx.moveTo(radius * 0.55, -radius * 0.55);
+      ctx.lineTo(-radius * 0.55, radius * 0.55);
       ctx.stroke();
       ctx.restore();
     }
@@ -999,39 +1084,50 @@
     function drawCards(theme) {
       const { colors } = theme;
       ctx.save();
-      ctx.globalAlpha = 0.16;
-      ctx.strokeStyle = colors.goldLight;
-      ctx.fillStyle = colors.gold;
-      ctx.lineWidth = 2;
+      ctx.translate(112, 865);
+      ctx.globalAlpha = 0.88;
+      ctx.shadowColor = "rgba(228, 200, 117, 0.48)";
+      ctx.shadowBlur = 12;
 
-      ctx.save();
-      ctx.translate(76, 940);
-      ctx.rotate(-0.16);
-      roundedRectPath(ctx, 0, 0, 118, 168, 10);
-      ctx.stroke();
-      drawSpade(59, 79, 30);
-      ctx.restore();
+      const cardGradient = ctx.createLinearGradient(0, 0, 0, 200);
+      cardGradient.addColorStop(0, "rgba(31, 27, 18, 0.9)");
+      cardGradient.addColorStop(1, "rgba(5, 5, 5, 0.93)");
 
-      ctx.save();
-      ctx.translate(714, 900);
-      ctx.rotate(0.14);
-      roundedRectPath(ctx, 0, 0, 118, 168, 10);
-      ctx.stroke();
-      drawSpade(59, 79, 30);
-      ctx.restore();
+      function drawOneCard(rotation, x, y, symbolScale, front = false) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(rotation);
+        roundedRectPath(ctx, -58, -86, 116, 172, 10);
+        ctx.fillStyle = cardGradient;
+        ctx.fill();
+        ctx.strokeStyle = front ? colors.goldLight : colors.gold;
+        ctx.lineWidth = front ? 4 : 3;
+        ctx.stroke();
+
+        ctx.fillStyle = front ? colors.goldLight : colors.gold;
+        ctx.font = `700 20px ${theme.typography.serif}`;
+        ctx.textAlign = "left";
+        ctx.fillText("A", -43, -55);
+        drawSpade(0, 2, 30 * symbolScale);
+        ctx.restore();
+      }
+
+      drawOneCard(-0.34, -34, 10, 0.78, false);
+      drawOneCard(0.29, 38, 8, 0.78, false);
+      drawOneCard(-0.02, 0, -8, 1, true);
       ctx.restore();
 
       function drawSpade(x, y, size) {
         ctx.beginPath();
         ctx.moveTo(x, y - size);
-        ctx.bezierCurveTo(x - size * 0.85, y - size * 0.18, x - size * 0.72, y + size * 0.45, x, y + size * 0.14);
-        ctx.bezierCurveTo(x + size * 0.72, y + size * 0.45, x + size * 0.85, y - size * 0.18, x, y - size);
+        ctx.bezierCurveTo(x - size * 0.92, y - size * 0.12, x - size * 0.72, y + size * 0.55, x, y + size * 0.15);
+        ctx.bezierCurveTo(x + size * 0.72, y + size * 0.55, x + size * 0.92, y - size * 0.12, x, y - size);
         ctx.fill();
         ctx.beginPath();
-        ctx.moveTo(x - size * 0.18, y + size * 0.08);
-        ctx.lineTo(x - size * 0.34, y + size * 0.72);
-        ctx.lineTo(x + size * 0.34, y + size * 0.72);
-        ctx.lineTo(x + size * 0.18, y + size * 0.08);
+        ctx.moveTo(x - size * 0.2, y + size * 0.12);
+        ctx.lineTo(x - size * 0.38, y + size * 0.78);
+        ctx.lineTo(x + size * 0.38, y + size * 0.78);
+        ctx.lineTo(x + size * 0.2, y + size * 0.12);
         ctx.fill();
       }
     }
@@ -1040,35 +1136,63 @@
       const panel = theme.layout.infoPanel;
       const { colors } = theme;
       ctx.save();
-      ctx.translate(panel.x + 28, panel.y + panel.height - 122);
-      ctx.globalAlpha = 0.3;
+      ctx.translate(panel.x + panel.width - 238, panel.y + 17);
+      ctx.globalAlpha = 0.92;
       ctx.strokeStyle = colors.goldLight;
-      ctx.fillStyle = "rgba(200, 162, 74, 0.08)";
-      ctx.lineWidth = 2;
+      ctx.fillStyle = "rgba(200, 162, 74, 0.18)";
+      ctx.lineWidth = 3;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.shadowColor = "rgba(228, 200, 117, 0.48)";
+      ctx.shadowBlur = 9;
 
       ctx.beginPath();
-      ctx.moveTo(10, 94);
-      ctx.lineTo(10, 40);
-      ctx.quadraticCurveTo(10, 25, 23, 18);
-      ctx.lineTo(23, 0);
-      ctx.lineTo(43, 0);
-      ctx.lineTo(43, 18);
-      ctx.quadraticCurveTo(56, 25, 56, 40);
-      ctx.lineTo(56, 94);
+      ctx.moveTo(14, 55);
+      ctx.lineTo(14, 25);
+      ctx.quadraticCurveTo(14, 18, 22, 14);
+      ctx.lineTo(22, 2);
+      ctx.lineTo(39, 2);
+      ctx.lineTo(39, 14);
+      ctx.quadraticCurveTo(47, 18, 47, 25);
+      ctx.lineTo(47, 55);
       ctx.closePath();
       ctx.fill();
       ctx.stroke();
 
       ctx.beginPath();
-      ctx.ellipse(94, 42, 25, 13, 0, 0, Math.PI * 2);
-      ctx.moveTo(69, 42);
-      ctx.quadraticCurveTo(72, 73, 89, 78);
-      ctx.lineTo(89, 99);
-      ctx.moveTo(99, 78);
-      ctx.lineTo(99, 99);
-      ctx.moveTo(77, 99);
-      ctx.lineTo(111, 99);
+      ctx.moveTo(20, 31);
+      ctx.lineTo(41, 31);
+      ctx.moveTo(24, 9);
+      ctx.lineTo(37, 9);
       ctx.stroke();
+
+      function drawGlass(x, y, size) {
+        ctx.beginPath();
+        ctx.moveTo(x - size, y);
+        ctx.quadraticCurveTo(x - size * 0.7, y + size * 0.85, x, y + size);
+        ctx.quadraticCurveTo(x + size * 0.7, y + size * 0.85, x + size, y);
+        ctx.closePath();
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(x, y + size);
+        ctx.lineTo(x, y + size * 2.15);
+        ctx.moveTo(x - size * 0.75, y + size * 2.15);
+        ctx.lineTo(x + size * 0.75, y + size * 2.15);
+        ctx.stroke();
+      }
+
+      drawGlass(91, 12, 18);
+      drawGlass(139, 12, 18);
+
+      ctx.beginPath();
+      ctx.moveTo(75, 19);
+      ctx.lineTo(156, 19);
+      ctx.strokeStyle = "rgba(228, 200, 117, 0.55)";
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      drawSparkle(178, 22, 8, colors.goldLight, 0.9);
+      drawSparkle(198, 43, 5, colors.goldLight, 0.76);
       ctx.restore();
     }
 
@@ -1282,9 +1406,9 @@
       if (state.decorations.flourish) drawFlourish(theme);
       if (state.decorations.chandelier) drawChandelier(theme);
       if (state.decorations.cards) drawCards(theme);
-      if (state.decorations.bottles) drawBottles(theme);
 
       drawInfoPanel(theme);
+      if (state.decorations.bottles) drawBottles(theme);
       drawHeaderText(theme);
       drawCharacterName(theme);
       drawInformation(theme);
