@@ -7,6 +7,87 @@
   <meta name="theme-color" content="#070707">
   <title>RPcards｜FF14向け縦型デジタルカードジェネレーター</title>
   <style>
+
+    @font-face {
+      font-family: "RP Dancing Script";
+      src: url("./fonts/DancingScript.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400 700;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "RP Hachi Maru Pop";
+      src: url("./fonts/HachiMaruPop-Regular.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "RP Kaisei Decol";
+      src: url("./fonts/KaiseiDecol-Regular.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "RP M PLUS 1p Black";
+      src: url("./fonts/MPLUS1p-Black.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 900;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "RP Yeseva One";
+      src: url("./fonts/YesevaOne-Regular.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "RP Prata";
+      src: url("./fonts/Prata-Regular.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "RP Zen Kurenaido";
+      src: url("./fonts/ZenKurenaido-Regular.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "RP Zen Maru Gothic";
+      src: url("./fonts/ZenMaruGothic-Regular.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "RP Cinzel";
+      src: url("./fonts/Cinzel-Variable.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400 900;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "RP Cormorant Garamond";
+      src: url("./fonts/CormorantGaramond-Variable.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 300 700;
+      font-display: swap;
+    }
+
     :root {
       color-scheme: dark;
       --bg: #080808;
@@ -304,6 +385,41 @@
       font-size: 0.82rem;
     }
 
+    .font-toolbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: end;
+      padding-bottom: 13px;
+      border-bottom: 1px solid rgba(200, 162, 74, 0.15);
+    }
+
+    .font-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .font-control {
+      display: grid;
+      gap: 6px;
+      min-width: 0;
+      padding: 11px;
+      border: 1px solid #37332c;
+      border-radius: 11px;
+      background: rgba(8, 8, 8, 0.72);
+    }
+
+    .font-control > span {
+      color: #e8e2d6;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .font-select {
+      min-height: 41px;
+    }
+
     .preview-column {
       position: sticky;
       top: 18px;
@@ -417,8 +533,14 @@
 
       .field-grid,
       .radio-row,
-      .check-grid {
+      .check-grid,
+      .font-grid,
+      .font-toolbar {
         grid-template-columns: 1fr;
+      }
+
+      .font-toolbar button {
+        width: 100%;
       }
 
       .preview-shell {
@@ -537,7 +659,7 @@
 
           <label class="field full">
             <span>店名</span>
-            <input id="venueName" type="text" maxlength="60" placeholder="例：Fortune Bar Veytrix" autocomplete="off">
+            <input id="venueName" type="text" maxlength="60" placeholder="例：club Apocalypse" autocomplete="off">
           </label>
 
           <label class="field full">
@@ -578,7 +700,62 @@
       </section>
 
       <section class="control-section">
-        <h2 class="section-title">4. QRコード</h2>
+        <h2 class="section-title">4. フォント</h2>
+        <div class="section-body">
+          <div class="font-toolbar">
+            <label class="field">
+              <span>まとめて選択</span>
+              <select id="fontAllSelect" class="font-select" aria-label="すべての項目に適用する書体"></select>
+            </label>
+            <button id="applyAllFontsButton" type="button">すべての項目に適用</button>
+          </div>
+
+          <p class="hint">各項目ごとに別の書体を選べます。書体はRPcards内の <code>fonts</code> フォルダから読み込み、外部の配信先へは接続しません。</p>
+          <p id="fontStatus" class="hint" aria-live="polite"></p>
+
+          <div class="font-grid">
+            <label class="font-control">
+              <span>キャラクター名</span>
+              <select class="font-select item-font-select" data-font-target="characterName"></select>
+            </label>
+            <label class="font-control">
+              <span>店名</span>
+              <select class="font-select item-font-select" data-font-target="venueName"></select>
+            </label>
+            <label class="font-control">
+              <span>キャッチコピー</span>
+              <select class="font-select item-font-select" data-font-target="catchphrase"></select>
+            </label>
+            <label class="font-control">
+              <span>営業日</span>
+              <select class="font-select item-font-select" data-font-target="businessDays"></select>
+            </label>
+            <label class="font-control">
+              <span>営業時間</span>
+              <select class="font-select item-font-select" data-font-target="businessHours"></select>
+            </label>
+            <label class="font-control">
+              <span>DC</span>
+              <select class="font-select item-font-select" data-font-target="dataCenter"></select>
+            </label>
+            <label class="font-control">
+              <span>ワールド</span>
+              <select class="font-select item-font-select" data-font-target="world"></select>
+            </label>
+            <label class="font-control">
+              <span>住所</span>
+              <select class="font-select item-font-select" data-font-target="address"></select>
+            </label>
+            <label class="font-control">
+              <span>Xアカウント</span>
+              <select class="font-select item-font-select" data-font-target="xAccount"></select>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <section class="control-section">
+        <h2 class="section-title">5. QRコード</h2>
         <div class="section-body">
           <label class="field">
             <span>QRコード画像（任意）</span>
@@ -592,7 +769,7 @@
       </section>
 
       <section class="control-section">
-        <h2 class="section-title">5. 装飾</h2>
+        <h2 class="section-title">6. 装飾</h2>
         <div class="section-body">
           <div class="count-note">
             <span>最大3つまで選択できます</span>
@@ -620,7 +797,7 @@
       </section>
 
       <section class="control-section">
-        <h2 class="section-title">6. 保存</h2>
+        <h2 class="section-title">7. 保存</h2>
         <div class="section-body">
           <div class="button-row">
             <button id="saveButton" class="primary" type="button">PNGで保存</button>
@@ -651,6 +828,130 @@
 
     const CANVAS_WIDTH = 900;
     const CANVAS_HEIGHT = 1500;
+
+    const fontCatalog = {
+      zenMaruGothic: {
+        label: "Zen Maru Gothic｜丸く読みやすい",
+        group: "日本語・読みやすさ",
+        family: () => "'RP Zen Maru Gothic', 'Yu Gothic', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif",
+        weights: [400],
+        loadFaces: [
+          { family: "RP Zen Maru Gothic", weight: 400, sample: "RPcards 営業日 住所 鱗の旅人" }
+        ]
+      },
+      mplus1pBlack: {
+        label: "M PLUS 1p Black｜極太・力強い",
+        group: "日本語・読みやすさ",
+        family: () => "'RP M PLUS 1p Black', 'Yu Gothic', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif",
+        weights: [900],
+        loadFaces: [
+          { family: "RP M PLUS 1p Black", weight: 900, sample: "RPcards キャラクター名 鱗の旅人" }
+        ]
+      },
+      kaiseiDecol: {
+        label: "Kaisei Decol｜装飾明朝・高級感",
+        group: "日本語・明朝／装飾",
+        family: () => "'RP Kaisei Decol', 'Yu Mincho', 'Hiragino Mincho ProN', serif",
+        weights: [400],
+        loadFaces: [
+          { family: "RP Kaisei Decol", weight: 400, sample: "RPcards 夜明け前に運命の一杯を" }
+        ]
+      },
+      zenKurenaido: {
+        label: "Zen Kurenaido｜手書き・繊細",
+        group: "日本語・手書き／個性",
+        family: () => "'RP Zen Kurenaido', 'Yu Gothic', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif",
+        weights: [400],
+        loadFaces: [
+          { family: "RP Zen Kurenaido", weight: 400, sample: "RPcards 夜明け前に運命の一杯を" }
+        ]
+      },
+      hachiMaruPop: {
+        label: "Hachi Maru Pop｜可愛い・ポップ",
+        group: "日本語・手書き／個性",
+        family: () => "'RP Hachi Maru Pop', 'Yu Gothic', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif",
+        weights: [400],
+        loadFaces: [
+          { family: "RP Hachi Maru Pop", weight: 400, sample: "RPcards キャラクター名 店名" }
+        ]
+      },
+      cinzel: {
+        label: "Cinzel｜重厚・クラシック",
+        group: "英字・クラシック／高級感",
+        family: () => "'RP Cinzel', 'RP Kaisei Decol', Georgia, serif",
+        weights: [400, 500, 600, 700, 800, 900],
+        loadFaces: [
+          { family: "RP Cinzel", weight: 700, sample: "RPcards VEYTRIX LUKA" },
+          { family: "RP Kaisei Decol", weight: 400, sample: "鱗の旅人 営業日 住所" }
+        ]
+      },
+      cormorantGaramond: {
+        label: "Cormorant Garamond｜上品・繊細",
+        group: "英字・クラシック／高級感",
+        family: () => "'RP Cormorant Garamond', 'RP Kaisei Decol', Georgia, serif",
+        weights: [300, 400, 500, 600, 700],
+        loadFaces: [
+          { family: "RP Cormorant Garamond", weight: 600, sample: "RPcards Veytrix Luka" },
+          { family: "RP Kaisei Decol", weight: 400, sample: "鱗の旅人 営業日 住所" }
+        ]
+      },
+      prata: {
+        label: "Prata｜華やか・高級感",
+        group: "英字・クラシック／高級感",
+        family: () => "'RP Prata', 'RP Kaisei Decol', Georgia, serif",
+        weights: [400],
+        loadFaces: [
+          { family: "RP Prata", weight: 400, sample: "RPcards Veytrix Luka" },
+          { family: "RP Kaisei Decol", weight: 400, sample: "鱗の旅人 営業日 住所" }
+        ]
+      },
+      yesevaOne: {
+        label: "Yeseva One｜華やか・存在感",
+        group: "英字・装飾／筆記体",
+        family: () => "'RP Yeseva One', 'RP Kaisei Decol', Georgia, serif",
+        weights: [400],
+        loadFaces: [
+          { family: "RP Yeseva One", weight: 400, sample: "RPcards Veytrix Luka" },
+          { family: "RP Kaisei Decol", weight: 400, sample: "鱗の旅人 営業日 住所" }
+        ]
+      },
+      dancingScript: {
+        label: "Dancing Script｜華やかな筆記体",
+        group: "英字・装飾／筆記体",
+        family: () => "'RP Dancing Script', 'RP Zen Kurenaido', cursive",
+        weights: [400, 500, 600, 700],
+        loadFaces: [
+          { family: "RP Dancing Script", weight: 700, sample: "RPcards Veytrix Luka" },
+          { family: "RP Zen Kurenaido", weight: 400, sample: "鱗の旅人 営業日 住所" }
+        ]
+      },
+      standardSerif: {
+        label: "端末標準の明朝体｜予備",
+        group: "端末標準",
+        family: theme => theme.typography.serif,
+        weights: [400, 500, 600, 700],
+        loadFaces: []
+      },
+      standardSans: {
+        label: "端末標準のゴシック体｜予備",
+        group: "端末標準",
+        family: theme => theme.typography.sans,
+        weights: [400, 500, 600, 700],
+        loadFaces: []
+      }
+    };
+
+    const fontTargets = [
+      { key: "characterName", label: "キャラクター名" },
+      { key: "venueName", label: "店名" },
+      { key: "catchphrase", label: "キャッチコピー" },
+      { key: "businessDays", label: "営業日" },
+      { key: "businessHours", label: "営業時間" },
+      { key: "dataCenter", label: "DC" },
+      { key: "world", label: "ワールド" },
+      { key: "address", label: "住所" },
+      { key: "xAccount", label: "Xアカウント" }
+    ];
 
     const themes = {
       blackGold: {
@@ -701,6 +1002,18 @@
       address: "",
       xAccount: "",
 
+      fonts: {
+        characterName: "cinzel",
+        venueName: "cinzel",
+        catchphrase: "kaiseiDecol",
+        businessDays: "zenMaruGothic",
+        businessHours: "zenMaruGothic",
+        dataCenter: "zenMaruGothic",
+        world: "zenMaruGothic",
+        address: "zenMaruGothic",
+        xAccount: "zenMaruGothic"
+      },
+
       qrImage: null,
       qrFileName: "",
 
@@ -749,6 +1062,9 @@
       world: document.getElementById("world"),
       address: document.getElementById("address"),
       xAccount: document.getElementById("xAccount"),
+      fontAllSelect: document.getElementById("fontAllSelect"),
+      fontStatus: document.getElementById("fontStatus"),
+      applyAllFontsButton: document.getElementById("applyAllFontsButton"),
       qrInput: document.getElementById("qrInput"),
       removeQrButton: document.getElementById("removeQrButton"),
       decorationCount: document.getElementById("decorationCount"),
@@ -767,6 +1083,135 @@
       "address",
       "xAccount"
     ];
+
+    function getFontDefinition(fontKey) {
+      return fontCatalog[fontKey] || fontCatalog.standardSans;
+    }
+
+    function getFontFamily(fontKey, theme) {
+      return getFontDefinition(fontKey).family(theme);
+    }
+
+    function getFontWeight(fontKey, requestedWeight) {
+      const weights = getFontDefinition(fontKey).weights || [400];
+      return weights.reduce((closest, weight) =>
+        Math.abs(weight - requestedWeight) < Math.abs(closest - requestedWeight) ? weight : closest
+      , weights[0]);
+    }
+
+    function makeCanvasFont(fontKey, size, requestedWeight, theme) {
+      return `${getFontWeight(fontKey, requestedWeight)} ${size}px ${getFontFamily(fontKey, theme)}`;
+    }
+
+    function populateFontSelect(select) {
+      select.replaceChildren();
+      const groups = new Map();
+
+      Object.entries(fontCatalog).forEach(([key, definition]) => {
+        const groupName = definition.group || "その他";
+        if (!groups.has(groupName)) {
+          const optgroup = document.createElement("optgroup");
+          optgroup.label = groupName;
+          groups.set(groupName, optgroup);
+          select.appendChild(optgroup);
+        }
+
+        const option = document.createElement("option");
+        option.value = key;
+        option.textContent = definition.label;
+        option.style.fontFamily = getFontFamily(key, themes[state.theme]);
+        option.style.fontWeight = String(getFontWeight(key, 600));
+        groups.get(groupName).appendChild(option);
+      });
+    }
+
+    function styleFontSelect(select, fontKey = select.value) {
+      const theme = themes[state.theme];
+      select.style.fontFamily = getFontFamily(fontKey, theme);
+      select.style.fontWeight = String(getFontWeight(fontKey, 600));
+    }
+
+    function setFontStatus(message = "", isError = false) {
+      if (!elements.fontStatus) return;
+      elements.fontStatus.textContent = message;
+      elements.fontStatus.style.color = isError ? "#e7aaaa" : "";
+    }
+
+    async function ensureFontReady(fontKey, sampleText = "") {
+      const definition = getFontDefinition(fontKey);
+      const faces = definition.loadFaces || [];
+      if (!faces.length || !document.fonts?.load) return true;
+
+      try {
+        const results = await Promise.all(faces.map(face => {
+          const text = face.sample || sampleText || "RPcards 鱗の旅人";
+          return document.fonts.load(`${face.weight || 400} 64px "${face.family}"`, text);
+        }));
+
+        const loaded = results.every(result => result.length > 0);
+        if (!loaded) {
+          setFontStatus("一部の書体を読み込めませんでした。fontsフォルダの配置とファイル名を確認してください。", true);
+        }
+        return loaded;
+      } catch (error) {
+        console.error("Font loading failed:", error);
+        setFontStatus("書体を読み込めませんでした。fontsフォルダの配置とファイル名を確認してください。", true);
+        return false;
+      }
+    }
+
+    async function ensureSelectedFontsReady() {
+      const requests = fontTargets.map(({ key }) => ensureFontReady(state.fonts[key], state[key]));
+      const results = await Promise.all(requests);
+      if (results.every(Boolean)) {
+        setFontStatus("");
+      }
+      if (document.fonts?.ready) {
+        await document.fonts.ready;
+      }
+      return results.every(Boolean);
+    }
+
+    function setupFontControls() {
+      populateFontSelect(elements.fontAllSelect);
+      elements.fontAllSelect.value = "zenMaruGothic";
+      styleFontSelect(elements.fontAllSelect);
+
+      document.querySelectorAll(".item-font-select").forEach(select => {
+        populateFontSelect(select);
+        const target = select.dataset.fontTarget;
+        select.value = state.fonts[target];
+        styleFontSelect(select);
+
+        select.addEventListener("change", async event => {
+          const key = event.target.dataset.fontTarget;
+          state.fonts[key] = event.target.value;
+          styleFontSelect(event.target);
+          renderCanvas();
+          await ensureFontReady(state.fonts[key], state[key]);
+          renderCanvas();
+        });
+      });
+
+      elements.fontAllSelect.addEventListener("change", event => {
+        styleFontSelect(event.target);
+      });
+
+      elements.applyAllFontsButton.addEventListener("click", async () => {
+        const fontKey = elements.fontAllSelect.value;
+        fontTargets.forEach(({ key }) => {
+          state.fonts[key] = fontKey;
+          const select = document.querySelector(`.item-font-select[data-font-target="${key}"]`);
+          if (select) {
+            select.value = fontKey;
+            styleFontSelect(select);
+          }
+        });
+        renderCanvas();
+        await ensureSelectedFontsReady();
+        renderCanvas();
+      });
+    }
 
     function roundedRectPath(context, x, y, width, height, radius) {
       const r = Math.min(radius, width / 2, height / 2);
@@ -1216,14 +1661,39 @@
       ctx.restore();
     }
 
-    function fitFontSize(text, maxWidth, startSize, minSize, fontFamily, weight = 700) {
+    function fitFontSize(text, maxWidth, startSize, minSize, fontKey, weight, theme) {
       let size = startSize;
       while (size > minSize) {
-        ctx.font = `${weight} ${size}px ${fontFamily}`;
+        ctx.font = makeCanvasFont(fontKey, size, weight, theme);
         if (ctx.measureText(text).width <= maxWidth) break;
         size -= 2;
       }
       return size;
+    }
+
+    function measureTextParts(parts, size, theme) {
+      return parts.reduce((width, part) => {
+        ctx.font = makeCanvasFont(part.fontKey, size, part.weight, theme);
+        return width + ctx.measureText(part.text).width;
+      }, 0);
+    }
+
+    function fitTextParts(parts, maxWidth, startSize, minSize, theme) {
+      let size = startSize;
+      while (size > minSize && measureTextParts(parts, size, theme) > maxWidth) {
+        size -= 1;
+      }
+      return size;
+    }
+
+    function drawTextParts(parts, x, y, size, color, theme) {
+      let currentX = x;
+      parts.forEach(part => {
+        ctx.font = makeCanvasFont(part.fontKey, size, part.weight, theme);
+        ctx.fillStyle = part.color || color;
+        ctx.fillText(part.text, currentX, y);
+        currentX += ctx.measureText(part.text).width;
+      });
     }
 
     function drawHeaderText(theme) {
@@ -1232,11 +1702,12 @@
       const catchphrase = state.catchphrase.trim();
 
       if (venue) {
+        const fontKey = state.fonts.venueName;
         ctx.save();
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        const size = fitFontSize(venue, layout.header.width - 70, 52, 28, typography.serif, 700);
-        ctx.font = `700 ${size}px ${typography.serif}`;
+        const size = fitFontSize(venue, layout.header.width - 70, 52, 28, fontKey, 700, theme);
+        ctx.font = makeCanvasFont(fontKey, size, 700, theme);
         ctx.fillStyle = colors.goldLight;
         ctx.shadowColor = "rgba(0,0,0,0.9)";
         ctx.shadowBlur = 12;
@@ -1253,11 +1724,12 @@
       }
 
       if (catchphrase) {
+        const fontKey = state.fonts.catchphrase;
         ctx.save();
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        const size = fitFontSize(catchphrase, 690, 25, 18, typography.sans, 600);
-        ctx.font = `600 ${size}px ${typography.sans}`;
+        const size = fitFontSize(catchphrase, 690, 25, 18, fontKey, 600, theme);
+        ctx.font = makeCanvasFont(fontKey, size, 600, theme);
         ctx.fillStyle = colors.white;
         ctx.shadowColor = "rgba(0,0,0,0.95)";
         ctx.shadowBlur = 9;
@@ -1270,11 +1742,12 @@
       const name = state.characterName.trim();
       if (!name) return;
 
+      const fontKey = state.fonts.characterName;
       ctx.save();
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      const size = fitFontSize(name, 770, 86, 42, theme.typography.serif, 700);
-      ctx.font = `700 ${size}px ${theme.typography.serif}`;
+      const size = fitFontSize(name, 770, 86, 42, fontKey, 700, theme);
+      ctx.font = makeCanvasFont(fontKey, size, 700, theme);
       ctx.lineWidth = Math.max(3, size * 0.065);
       ctx.strokeStyle = "rgba(22, 16, 5, 0.95)";
       ctx.shadowColor = "rgba(0, 0, 0, 0.9)";
@@ -1299,21 +1772,60 @@
       const textRight = hasQr ? panel.x + panel.width - layout.qrSize - 64 : panel.x + panel.width - 42;
       const maxTextWidth = textRight - textLeft;
 
+      const rows = [];
+
       const businessParts = [];
-      if (state.businessDays.trim()) businessParts.push(state.businessDays.trim());
-      if (state.businessHours.trim()) businessParts.push(state.businessHours.trim());
-      const businessLine = businessParts.join("  /  ");
+      if (state.businessDays.trim()) {
+        businessParts.push({
+          text: state.businessDays.trim(),
+          fontKey: state.fonts.businessDays,
+          weight: 700
+        });
+      }
+      if (state.businessDays.trim() && state.businessHours.trim()) {
+        businessParts.push({ text: "  /  ", fontKey: "standardSans", weight: 500 });
+      }
+      if (state.businessHours.trim()) {
+        businessParts.push({
+          text: state.businessHours.trim(),
+          fontKey: state.fonts.businessHours,
+          weight: 700
+        });
+      }
+      if (businessParts.length) rows.push({ label: "OPEN", parts: businessParts, strong: true });
 
       const locationParts = [];
-      if (state.dataCenter.trim()) locationParts.push(state.dataCenter.trim());
-      if (state.world.trim()) locationParts.push(state.world.trim());
-      const dcWorldLine = locationParts.join("  /  ");
+      if (state.dataCenter.trim()) {
+        locationParts.push({
+          text: state.dataCenter.trim(),
+          fontKey: state.fonts.dataCenter,
+          weight: 600
+        });
+      }
+      if (state.dataCenter.trim() && state.world.trim()) {
+        locationParts.push({ text: "  /  ", fontKey: "standardSans", weight: 500 });
+      }
+      if (state.world.trim()) {
+        locationParts.push({
+          text: state.world.trim(),
+          fontKey: state.fonts.world,
+          weight: 600
+        });
+      }
+      if (locationParts.length) rows.push({ label: "WORLD", parts: locationParts });
 
-      const rows = [];
-      if (businessLine) rows.push({ label: "OPEN", value: businessLine, strong: true });
-      if (dcWorldLine) rows.push({ label: "WORLD", value: dcWorldLine });
-      if (state.address.trim()) rows.push({ label: "ADDRESS", value: state.address.trim() });
-      if (state.xAccount.trim()) rows.push({ label: "X", value: state.xAccount.trim() });
+      if (state.address.trim()) {
+        rows.push({
+          label: "ADDRESS",
+          parts: [{ text: state.address.trim(), fontKey: state.fonts.address, weight: 600 }]
+        });
+      }
+      if (state.xAccount.trim()) {
+        rows.push({
+          label: "X",
+          parts: [{ text: state.xAccount.trim(), fontKey: state.fonts.xAccount, weight: 600 }]
+        });
+      }
 
       if (rows.length === 0) {
         ctx.save();
@@ -1344,10 +1856,9 @@
         const valueMaxWidth = maxTextWidth - labelWidth;
         const baseSize = row.strong ? 29 : 25;
         const minSize = row.strong ? 20 : 18;
-        const valueSize = fitFontSize(row.value, valueMaxWidth, baseSize, minSize, typography.sans, row.strong ? 700 : 600);
-        ctx.font = `${row.strong ? 700 : 600} ${valueSize}px ${typography.sans}`;
+        const valueSize = fitTextParts(row.parts, valueMaxWidth, baseSize, minSize, theme);
         ctx.fillStyle = row.strong ? colors.white : colors.muted;
-        ctx.fillText(row.value, textLeft + labelWidth, y);
+        drawTextParts(row.parts, textLeft + labelWidth, y, valueSize, ctx.fillStyle, theme);
         ctx.restore();
       });
     }
@@ -1525,6 +2036,12 @@
         elements[key].value = state[key];
       });
 
+      document.querySelectorAll(".item-font-select").forEach(select => {
+        const target = select.dataset.fontTarget;
+        select.value = state.fonts[target];
+        styleFontSelect(select);
+      });
+
       document.querySelectorAll(".decoration-check").forEach(check => {
         check.checked = Boolean(state.decorations[check.value]);
       });
@@ -1661,6 +2178,7 @@
       elements[key].addEventListener("input", event => {
         state[key] = event.target.value;
         renderCanvas();
+        ensureFontReady(state.fonts[key], state[key]).then(renderCanvas);
       });
     });
 
@@ -1693,7 +2211,8 @@
       });
     });
 
-    elements.saveButton.addEventListener("click", () => {
+    elements.saveButton.addEventListener("click", async () => {
+      await ensureSelectedFontsReady();
       renderCanvas();
       canvas.toBlob(blob => {
         if (!blob) {
@@ -1723,8 +2242,10 @@
       renderCanvas();
     });
 
+    setupFontControls();
     syncControlsFromState();
     renderCanvas();
+    ensureSelectedFontsReady().then(renderCanvas);
   </script>
 </body>
 </html>
