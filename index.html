@@ -355,6 +355,18 @@
       aspect-ratio: 9 / 15;
       background: #070707;
       border-radius: 9px;
+      touch-action: pan-y;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    canvas.photo-ready {
+      cursor: grab;
+      touch-action: none;
+    }
+
+    canvas.photo-dragging {
+      cursor: grabbing;
     }
 
     .footer-note {
@@ -466,6 +478,8 @@
             </div>
           </div>
 
+          <p class="hint">プレビュー上の写真をドラッグすると、表示位置を直接調整できます。</p>
+
           <label class="field">
             <span>拡大率</span>
             <div class="range-wrap">
@@ -475,7 +489,7 @@
           </label>
 
           <label class="field">
-            <span>横位置</span>
+            <span>横位置（微調整）</span>
             <div class="range-wrap">
               <input id="photoX" type="range" min="-100" max="100" value="0" step="1">
               <output id="photoXValue" class="range-value">0%</output>
@@ -483,7 +497,7 @@
           </label>
 
           <label class="field">
-            <span>縦位置</span>
+            <span>縦位置（微調整）</span>
             <div class="range-wrap">
               <input id="photoY" type="range" min="-100" max="100" value="0" step="1">
               <output id="photoYValue" class="range-value">0%</output>
@@ -699,6 +713,14 @@
     });
 
     let state = initialState();
+    const photoDrag = {
+      active: false,
+      pointerId: null,
+      startCanvasX: 0,
+      startCanvasY: 0,
+      startPhotoX: 0,
+      startPhotoY: 0
+    };
 
     const canvas = document.getElementById("cardCanvas");
     const ctx = canvas.getContext("2d", { alpha: false });
@@ -1250,6 +1272,7 @@
 
     function renderCanvas() {
       const theme = themes[state.theme];
+      canvas.classList.toggle("photo-ready", Boolean(state.photo));
       ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
       drawBackground(theme);
@@ -1294,6 +1317,46 @@
       elements.photoYValue.value = `${state.photoY}%`;
       elements.photoBrightnessValue.value = `${Math.round(state.photoBrightness * 100)}%`;
       elements.overlayOpacityValue.value = `${Math.round(state.overlayOpacity * 100)}%`;
+    }
+
+
+    function clamp(value, min, max) {
+      return Math.min(max, Math.max(min, value));
+    }
+
+    function getCanvasPoint(event) {
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: (event.clientX - rect.left) * (canvas.width / rect.width),
+        y: (event.clientY - rect.top) * (canvas.height / rect.height)
+      };
+    }
+
+    function isInsidePhotoArea(point) {
+      const photoBox = themes[state.theme].layout.photo;
+      return point.x >= photoBox.x
+        && point.x <= photoBox.x + photoBox.width
+        && point.y >= photoBox.y
+        && point.y <= photoBox.y + photoBox.height;
+    }
+
+    function syncPhotoPositionControls() {
+      elements.photoX.value = String(state.photoX);
+      elements.photoY.value = String(state.photoY);
+      updateRangeLabels();
+    }
+
+    function finishPhotoDrag(event) {
+      if (!photoDrag.active || (event && event.pointerId !== photoDrag.pointerId)) return;
+
+      const pointerId = photoDrag.pointerId;
+      photoDrag.active = false;
+      photoDrag.pointerId = null;
+      canvas.classList.remove("photo-dragging");
+
+      if (pointerId !== null && canvas.hasPointerCapture?.(pointerId)) {
+        canvas.releasePointerCapture(pointerId);
+      }
     }
 
     function resetPhotoAdjustments() {
@@ -1398,6 +1461,56 @@
       updateRangeLabels();
       renderCanvas();
     });
+
+    canvas.addEventListener("pointerdown", event => {
+      if (!state.photo) return;
+
+      const point = getCanvasPoint(event);
+      if (!isInsidePhotoArea(point)) return;
+
+      photoDrag.active = true;
+      photoDrag.pointerId = event.pointerId;
+      photoDrag.startCanvasX = point.x;
+      photoDrag.startCanvasY = point.y;
+      photoDrag.startPhotoX = state.photoX;
+      photoDrag.startPhotoY = state.photoY;
+
+      canvas.setPointerCapture(event.pointerId);
+      canvas.classList.add("photo-dragging");
+      event.preventDefault();
+    });
+
+    canvas.addEventListener("pointermove", event => {
+      if (!photoDrag.active || event.pointerId !== photoDrag.pointerId) return;
+
+      const point = getCanvasPoint(event);
+      const photoBox = themes[state.theme].layout.photo;
+      const deltaX = point.x - photoDrag.startCanvasX;
+      const deltaY = point.y - photoDrag.startCanvasY;
+      const minX = Number(elements.photoX.min);
+      const maxX = Number(elements.photoX.max);
+      const minY = Number(elements.photoY.min);
+      const maxY = Number(elements.photoY.max);
+
+      state.photoX = Math.round(clamp(
+        photoDrag.startPhotoX + (deltaX / (photoBox.width * 0.5)) * 100,
+        minX,
+        maxX
+      ));
+      state.photoY = Math.round(clamp(
+        photoDrag.startPhotoY + (deltaY / (photoBox.height * 0.5)) * 100,
+        minY,
+        maxY
+      ));
+
+      syncPhotoPositionControls();
+      renderCanvas();
+      event.preventDefault();
+    });
+
+    canvas.addEventListener("pointerup", finishPhotoDrag);
+    canvas.addEventListener("pointercancel", finishPhotoDrag);
+    canvas.addEventListener("lostpointercapture", finishPhotoDrag);
 
     elements.photoBrightness.addEventListener("input", event => {
       state.photoBrightness = Number(event.target.value) / 100;
