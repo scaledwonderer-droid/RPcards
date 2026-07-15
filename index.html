@@ -877,8 +877,8 @@
           </datalist>
 
           <label class="field full">
-            <span>住所 <em class="required-mark">必須</em></span>
-            <input id="address" type="text" maxlength="80" required aria-required="true" placeholder="例：ゴブレットビュート 22区 32番地" autocomplete="off">
+            <span>住所（任意）</span>
+            <input id="address" type="text" maxlength="80" placeholder="例：ゴブレットビュート 22区 32番地" autocomplete="off">
           </label>
 
           <label class="field full">
@@ -1276,8 +1276,7 @@
       { key: "venueName", label: "店名", element: () => elements.venueName, isValid: () => Boolean(state.venueName.trim()) },
       { key: "businessDays", label: "営業日", element: () => elements.businessDays, isValid: () => Boolean(state.businessDays.trim()) },
       { key: "businessHours", label: "営業時間", element: () => elements.businessHours, isValid: () => Boolean(state.businessHours.trim()) },
-      { key: "dataCenterWorld", label: "DC / ワールド", element: () => elements.dataCenterWorld, isValid: () => Boolean(state.dataCenterWorld.trim()) },
-      { key: "address", label: "住所", element: () => elements.address, isValid: () => Boolean(state.address.trim()) }
+      { key: "dataCenterWorld", label: "DC / ワールド", element: () => elements.dataCenterWorld, isValid: () => Boolean(state.dataCenterWorld.trim()) }
     ];
 
     function setSaveStatus(message = "", isError = false) {
