@@ -394,10 +394,33 @@
       border-bottom: 1px solid rgba(200, 162, 74, 0.15);
     }
 
+    .font-details {
+      border: 1px solid #37332c;
+      border-radius: 11px;
+      background: rgba(8, 8, 8, 0.48);
+      overflow: hidden;
+    }
+
+    .font-details summary {
+      padding: 10px 12px;
+      color: #e8e2d6;
+      font-size: 0.86rem;
+      font-weight: 700;
+      list-style-position: inside;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .font-details[open] summary {
+      color: var(--gold-light);
+      border-bottom: 1px solid rgba(200, 162, 74, 0.15);
+    }
+
     .font-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
+      padding: 10px;
     }
 
     .font-control {
@@ -418,6 +441,10 @@
 
     .font-select {
       min-height: 41px;
+    }
+
+    .font-control select {
+      min-width: 0;
     }
 
     .preview-column {
@@ -534,9 +561,29 @@
       .field-grid,
       .radio-row,
       .check-grid,
-      .font-grid,
       .font-toolbar {
         grid-template-columns: 1fr;
+      }
+
+      .font-grid {
+        grid-template-columns: 1fr;
+        gap: 7px;
+        padding: 8px;
+      }
+
+      .font-control {
+        grid-template-columns: 88px minmax(0, 1fr);
+        align-items: center;
+        gap: 8px;
+        padding: 8px 9px;
+      }
+
+      .font-control > span {
+        font-size: 0.76rem;
+      }
+
+      .font-select {
+        min-height: 39px;
       }
 
       .font-toolbar button {
@@ -595,7 +642,7 @@
               </label>
               <label class="choice-card">
                 <input type="radio" name="photoMode" value="contain">
-                台紙を見せて配置
+                画像全体を表示
               </label>
             </div>
           </div>
@@ -654,7 +701,7 @@
         <div class="section-body field-grid">
           <label class="field full">
             <span>キャラクター名</span>
-            <input id="characterName" type="text" maxlength="60" placeholder="例：Luca Kusakabe" autocomplete="off">
+            <input id="characterName" type="text" maxlength="22" placeholder="例：Luca Kusakabe" autocomplete="off">
           </label>
 
           <label class="field full">
@@ -710,10 +757,13 @@
             <button id="applyAllFontsButton" type="button">すべての項目に適用</button>
           </div>
 
-          <p class="hint">各項目ごとに別の書体を選べます。書体はRPcards内の <code>fonts</code> フォルダから読み込み、外部の配信先へは接続しません。</p>
+          <p class="hint">各項目ごとに別の書体を選べます。選択欄は「見た目の目安｜書体名」の順で表示しています。</p>
+          <p class="hint">書体はRPcards内の <code>fonts</code> フォルダから読み込み、外部の配信先へは接続しません。</p>
           <p id="fontStatus" class="hint" aria-live="polite"></p>
 
-          <div class="font-grid">
+          <details class="font-details">
+            <summary>項目ごとに書体を設定</summary>
+            <div class="font-grid">
             <label class="font-control">
               <span>キャラクター名</span>
               <select class="font-select item-font-select" data-font-target="characterName"></select>
@@ -750,7 +800,8 @@
               <span>Xアカウント</span>
               <select class="font-select item-font-select" data-font-target="xAccount"></select>
             </label>
-          </div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -831,7 +882,7 @@
 
     const fontCatalog = {
       zenMaruGothic: {
-        label: "Zen Maru Gothic｜丸く読みやすい",
+        label: "丸く読みやすい｜Zen Maru Gothic",
         group: "日本語・読みやすさ",
         family: () => "'RP Zen Maru Gothic', 'Yu Gothic', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif",
         weights: [400],
@@ -840,7 +891,7 @@
         ]
       },
       mplus1pBlack: {
-        label: "M PLUS 1p Black｜極太・力強い",
+        label: "極太で力強い｜M PLUS 1p Black",
         group: "日本語・読みやすさ",
         family: () => "'RP M PLUS 1p Black', 'Yu Gothic', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif",
         weights: [900],
@@ -849,7 +900,7 @@
         ]
       },
       kaiseiDecol: {
-        label: "Kaisei Decol｜装飾明朝・高級感",
+        label: "装飾明朝・高級感｜Kaisei Decol",
         group: "日本語・明朝／装飾",
         family: () => "'RP Kaisei Decol', 'Yu Mincho', 'Hiragino Mincho ProN', serif",
         weights: [400],
@@ -858,7 +909,7 @@
         ]
       },
       zenKurenaido: {
-        label: "Zen Kurenaido｜手書き・繊細",
+        label: "繊細な手書き風｜Zen Kurenaido",
         group: "日本語・手書き／個性",
         family: () => "'RP Zen Kurenaido', 'Yu Gothic', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif",
         weights: [400],
@@ -867,7 +918,7 @@
         ]
       },
       hachiMaruPop: {
-        label: "Hachi Maru Pop｜可愛い・ポップ",
+        label: "可愛い・ポップ｜Hachi Maru Pop",
         group: "日本語・手書き／個性",
         family: () => "'RP Hachi Maru Pop', 'Yu Gothic', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif",
         weights: [400],
@@ -876,7 +927,7 @@
         ]
       },
       cinzel: {
-        label: "Cinzel｜重厚・クラシック",
+        label: "重厚・クラシック｜Cinzel",
         group: "英字・クラシック／高級感",
         family: () => "'RP Cinzel', 'RP Kaisei Decol', Georgia, serif",
         weights: [400, 500, 600, 700, 800, 900],
@@ -886,7 +937,7 @@
         ]
       },
       cormorantGaramond: {
-        label: "Cormorant Garamond｜上品・繊細",
+        label: "上品・繊細｜Cormorant Garamond",
         group: "英字・クラシック／高級感",
         family: () => "'RP Cormorant Garamond', 'RP Kaisei Decol', Georgia, serif",
         weights: [300, 400, 500, 600, 700],
@@ -896,7 +947,7 @@
         ]
       },
       prata: {
-        label: "Prata｜華やか・高級感",
+        label: "華やか・高級感｜Prata",
         group: "英字・クラシック／高級感",
         family: () => "'RP Prata', 'RP Kaisei Decol', Georgia, serif",
         weights: [400],
@@ -906,7 +957,7 @@
         ]
       },
       yesevaOne: {
-        label: "Yeseva One｜華やか・存在感",
+        label: "華やか・存在感｜Yeseva One",
         group: "英字・装飾／筆記体",
         family: () => "'RP Yeseva One', 'RP Kaisei Decol', Georgia, serif",
         weights: [400],
@@ -916,7 +967,7 @@
         ]
       },
       dancingScript: {
-        label: "Dancing Script｜華やかな筆記体",
+        label: "華やかな筆記体｜Dancing Script",
         group: "英字・装飾／筆記体",
         family: () => "'RP Dancing Script', 'RP Zen Kurenaido', cursive",
         weights: [400, 500, 600, 700],
@@ -926,14 +977,14 @@
         ]
       },
       standardSerif: {
-        label: "端末標準の明朝体｜予備",
+        label: "予備の明朝体｜端末標準",
         group: "端末標準",
         family: theme => theme.typography.serif,
         weights: [400, 500, 600, 700],
         loadFaces: []
       },
       standardSans: {
-        label: "端末標準のゴシック体｜予備",
+        label: "予備のゴシック体｜端末標準",
         group: "端末標準",
         family: theme => theme.typography.sans,
         weights: [400, 500, 600, 700],
@@ -1003,7 +1054,7 @@
       xAccount: "",
 
       fonts: {
-        characterName: "cinzel",
+        characterName: "dancingScript",
         venueName: "cinzel",
         catchphrase: "kaiseiDecol",
         businessDays: "zenMaruGothic",
@@ -1292,6 +1343,9 @@
         ctx.fillText("MAIN PHOTO", 450, 650);
         ctx.restore();
       } else {
+        ctx.fillStyle = "#090909";
+        ctx.fillRect(photoBox.x, photoBox.y, photoBox.width, photoBox.height);
+
         const image = state.photo;
         const baseScale = state.photoMode === "cover"
           ? Math.max(photoBox.width / image.naturalWidth, photoBox.height / image.naturalHeight)
@@ -1746,7 +1800,7 @@
       ctx.save();
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      const size = fitFontSize(name, 770, 86, 42, fontKey, 700, theme);
+      const size = fitFontSize(name, 770, 86, 30, fontKey, 700, theme);
       ctx.font = makeCanvasFont(fontKey, size, 700, theme);
       ctx.lineWidth = Math.max(3, size * 0.065);
       ctx.strokeStyle = "rgba(22, 16, 5, 0.95)";
