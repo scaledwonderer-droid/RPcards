@@ -234,6 +234,44 @@
       font-weight: 700;
     }
 
+    .input-note {
+      color: var(--muted);
+      font-size: 0.75rem;
+      font-weight: 400;
+      line-height: 1.45;
+    }
+
+    .required-mark {
+      display: inline-flex;
+      align-items: center;
+      min-height: 18px;
+      margin-left: 6px;
+      padding: 0 6px;
+      border: 1px solid rgba(228, 200, 117, 0.5);
+      border-radius: 999px;
+      color: var(--gold-light);
+      font-size: 0.66rem;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 1;
+      vertical-align: 1px;
+    }
+
+    input.is-invalid,
+    select.is-invalid {
+      border-color: var(--danger) !important;
+      box-shadow: 0 0 0 3px rgba(220, 161, 161, 0.14);
+    }
+
+    .form-status {
+      min-height: 1.4em;
+      margin: 0;
+    }
+
+    .form-status.error {
+      color: #efb8b8;
+    }
+
     input[type="text"],
     select,
     input[type="file"] {
@@ -629,8 +667,8 @@
         <h2 class="section-title">2. 写真</h2>
         <div class="section-body">
           <label class="field">
-            <span>メイン写真</span>
-            <input id="photoInput" type="file" accept="image/png,image/jpeg,image/webp">
+            <span>メイン写真 <em class="required-mark">必須</em></span>
+            <input id="photoInput" type="file" accept="image/png,image/jpeg,image/webp" required aria-required="true">
           </label>
 
           <div class="field">
@@ -700,13 +738,13 @@
         <h2 class="section-title">3. プロフィール</h2>
         <div class="section-body field-grid">
           <label class="field full">
-            <span>キャラクター名</span>
-            <input id="characterName" type="text" maxlength="22" placeholder="例：Luca Kusakabe" autocomplete="off">
+            <span>キャラクター名 <em class="required-mark">必須</em></span>
+            <input id="characterName" type="text" maxlength="22" required aria-required="true" placeholder="例：Luca Kusakabe" autocomplete="off">
           </label>
 
           <label class="field full">
-            <span>店名</span>
-            <input id="venueName" type="text" maxlength="60" placeholder="例：club Apocalypse" autocomplete="off">
+            <span>店名 <em class="required-mark">必須</em></span>
+            <input id="venueName" type="text" maxlength="60" required aria-required="true" placeholder="例：club Apocalypse" autocomplete="off">
           </label>
 
           <label class="field full">
@@ -715,28 +753,132 @@
           </label>
 
           <label class="field">
-            <span>営業日</span>
-            <input id="businessDays" type="text" maxlength="50" placeholder="例：金・土" autocomplete="off">
+            <span>営業日 <em class="required-mark">必須</em></span>
+            <input id="businessDays" type="text" list="businessDaysOptions" maxlength="50" required aria-required="true" placeholder="候補から選択、または自由入力" autocomplete="off">
+            <small class="input-note">候補にない営業日も自由に入力できます。</small>
           </label>
+          <datalist id="businessDaysOptions">
+            <option value="毎日"></option>
+            <option value="平日"></option>
+            <option value="週末"></option>
+            <option value="月曜日"></option>
+            <option value="火曜日"></option>
+            <option value="水曜日"></option>
+            <option value="木曜日"></option>
+            <option value="金曜日"></option>
+            <option value="土曜日"></option>
+            <option value="日曜日"></option>
+            <option value="金・土"></option>
+            <option value="土・日"></option>
+            <option value="不定期"></option>
+            <option value="予約制"></option>
+          </datalist>
 
           <label class="field">
-            <span>営業時間</span>
-            <input id="businessHours" type="text" maxlength="50" placeholder="例：24:00–26:00" autocomplete="off">
-          </label>
-
-          <label class="field">
-            <span>DC</span>
-            <input id="dataCenter" type="text" maxlength="40" placeholder="例：Meteor" autocomplete="off">
-          </label>
-
-          <label class="field">
-            <span>ワールド</span>
-            <input id="world" type="text" maxlength="40" placeholder="例：Shinryu" autocomplete="off">
+            <span>営業時間 <em class="required-mark">必須</em></span>
+            <input id="businessHours" type="text" maxlength="50" required aria-required="true" placeholder="例：24:00–26:00" autocomplete="off">
           </label>
 
           <label class="field full">
-            <span>住所</span>
-            <input id="address" type="text" maxlength="80" placeholder="例：ゴブレットビュート 22区 32番地" autocomplete="off">
+            <span>DC / ワールド <em class="required-mark">必須</em></span>
+            <input id="dataCenterWorld" type="text" list="dataCenterWorldOptions" maxlength="80" required aria-required="true" placeholder="候補から選択、または自由入力（例：Meteor / Shinryu）" autocomplete="off">
+            <small class="input-note">候補にない表記や、訪問先のDC・ワールドも自由に入力できます。</small>
+          </label>
+          <datalist id="dataCenterWorldOptions">
+            <!-- 日本 -->
+            <option value="Elemental / Aegis"></option>
+            <option value="Elemental / Atomos"></option>
+            <option value="Elemental / Carbuncle"></option>
+            <option value="Elemental / Garuda"></option>
+            <option value="Elemental / Gungnir"></option>
+            <option value="Elemental / Kujata"></option>
+            <option value="Elemental / Tonberry"></option>
+            <option value="Elemental / Typhon"></option>
+            <option value="Gaia / Alexander"></option>
+            <option value="Gaia / Bahamut"></option>
+            <option value="Gaia / Durandal"></option>
+            <option value="Gaia / Fenrir"></option>
+            <option value="Gaia / Ifrit"></option>
+            <option value="Gaia / Ridill"></option>
+            <option value="Gaia / Tiamat"></option>
+            <option value="Gaia / Ultima"></option>
+            <option value="Mana / Anima"></option>
+            <option value="Mana / Asura"></option>
+            <option value="Mana / Chocobo"></option>
+            <option value="Mana / Hades"></option>
+            <option value="Mana / Ixion"></option>
+            <option value="Mana / Masamune"></option>
+            <option value="Mana / Pandaemonium"></option>
+            <option value="Mana / Titan"></option>
+            <option value="Meteor / Belias"></option>
+            <option value="Meteor / Mandragora"></option>
+            <option value="Meteor / Ramuh"></option>
+            <option value="Meteor / Shinryu"></option>
+            <option value="Meteor / Unicorn"></option>
+            <option value="Meteor / Valefor"></option>
+            <option value="Meteor / Yojimbo"></option>
+            <option value="Meteor / Zeromus"></option>
+            <!-- 北米 -->
+            <option value="Aether / Adamantoise"></option>
+            <option value="Aether / Cactuar"></option>
+            <option value="Aether / Faerie"></option>
+            <option value="Aether / Gilgamesh"></option>
+            <option value="Aether / Jenova"></option>
+            <option value="Aether / Midgardsormr"></option>
+            <option value="Aether / Sargatanas"></option>
+            <option value="Aether / Siren"></option>
+            <option value="Crystal / Balmung"></option>
+            <option value="Crystal / Brynhildr"></option>
+            <option value="Crystal / Coeurl"></option>
+            <option value="Crystal / Diabolos"></option>
+            <option value="Crystal / Goblin"></option>
+            <option value="Crystal / Malboro"></option>
+            <option value="Crystal / Mateus"></option>
+            <option value="Crystal / Zalera"></option>
+            <option value="Dynamis / Cuchulainn"></option>
+            <option value="Dynamis / Golem"></option>
+            <option value="Dynamis / Halicarnassus"></option>
+            <option value="Dynamis / Kraken"></option>
+            <option value="Dynamis / Maduin"></option>
+            <option value="Dynamis / Marilith"></option>
+            <option value="Dynamis / Rafflesia"></option>
+            <option value="Dynamis / Seraph"></option>
+            <option value="Primal / Behemoth"></option>
+            <option value="Primal / Excalibur"></option>
+            <option value="Primal / Exodus"></option>
+            <option value="Primal / Famfrit"></option>
+            <option value="Primal / Hyperion"></option>
+            <option value="Primal / Lamia"></option>
+            <option value="Primal / Leviathan"></option>
+            <option value="Primal / Ultros"></option>
+            <!-- 欧州 -->
+            <option value="Chaos / Cerberus"></option>
+            <option value="Chaos / Louisoix"></option>
+            <option value="Chaos / Moogle"></option>
+            <option value="Chaos / Omega"></option>
+            <option value="Chaos / Phantom"></option>
+            <option value="Chaos / Ragnarok"></option>
+            <option value="Chaos / Sagittarius"></option>
+            <option value="Chaos / Spriggan"></option>
+            <option value="Light / Alpha"></option>
+            <option value="Light / Lich"></option>
+            <option value="Light / Odin"></option>
+            <option value="Light / Phoenix"></option>
+            <option value="Light / Raiden"></option>
+            <option value="Light / Shiva"></option>
+            <option value="Light / Twintania"></option>
+            <option value="Light / Zodiark"></option>
+            <!-- オセアニア -->
+            <option value="Materia / Bismarck"></option>
+            <option value="Materia / Ravana"></option>
+            <option value="Materia / Sephirot"></option>
+            <option value="Materia / Sophia"></option>
+            <option value="Materia / Zurvan"></option>
+          </datalist>
+
+          <label class="field full">
+            <span>住所 <em class="required-mark">必須</em></span>
+            <input id="address" type="text" maxlength="80" required aria-required="true" placeholder="例：ゴブレットビュート 22区 32番地" autocomplete="off">
           </label>
 
           <label class="field full">
@@ -785,12 +927,8 @@
               <select class="font-select item-font-select" data-font-target="businessHours"></select>
             </label>
             <label class="font-control">
-              <span>DC</span>
-              <select class="font-select item-font-select" data-font-target="dataCenter"></select>
-            </label>
-            <label class="font-control">
-              <span>ワールド</span>
-              <select class="font-select item-font-select" data-font-target="world"></select>
+              <span>DC / ワールド</span>
+              <select class="font-select item-font-select" data-font-target="dataCenterWorld"></select>
             </label>
             <label class="font-control">
               <span>住所</span>
@@ -854,6 +992,7 @@
             <button id="saveButton" class="primary" type="button">PNGで保存</button>
             <button id="resetAllButton" type="button">入力内容をリセット</button>
           </div>
+          <p id="saveStatus" class="hint form-status" aria-live="polite"></p>
           <p class="hint">出力サイズは900×1500pxです。表示中のプレビューと同じ内容で保存されます。</p>
         </div>
       </section>
@@ -998,8 +1137,7 @@
       { key: "catchphrase", label: "キャッチコピー" },
       { key: "businessDays", label: "営業日" },
       { key: "businessHours", label: "営業時間" },
-      { key: "dataCenter", label: "DC" },
-      { key: "world", label: "ワールド" },
+      { key: "dataCenterWorld", label: "DC / ワールド" },
       { key: "address", label: "住所" },
       { key: "xAccount", label: "Xアカウント" }
     ];
@@ -1048,8 +1186,7 @@
       catchphrase: "",
       businessDays: "",
       businessHours: "",
-      dataCenter: "",
-      world: "",
+      dataCenterWorld: "",
       address: "",
       xAccount: "",
 
@@ -1059,8 +1196,7 @@
         catchphrase: "kaiseiDecol",
         businessDays: "zenMaruGothic",
         businessHours: "zenMaruGothic",
-        dataCenter: "zenMaruGothic",
-        world: "zenMaruGothic",
+        dataCenterWorld: "zenMaruGothic",
         address: "zenMaruGothic",
         xAccount: "zenMaruGothic"
       },
@@ -1109,8 +1245,7 @@
       catchphrase: document.getElementById("catchphrase"),
       businessDays: document.getElementById("businessDays"),
       businessHours: document.getElementById("businessHours"),
-      dataCenter: document.getElementById("dataCenter"),
-      world: document.getElementById("world"),
+      dataCenterWorld: document.getElementById("dataCenterWorld"),
       address: document.getElementById("address"),
       xAccount: document.getElementById("xAccount"),
       fontAllSelect: document.getElementById("fontAllSelect"),
@@ -1119,6 +1254,7 @@
       qrInput: document.getElementById("qrInput"),
       removeQrButton: document.getElementById("removeQrButton"),
       decorationCount: document.getElementById("decorationCount"),
+      saveStatus: document.getElementById("saveStatus"),
       saveButton: document.getElementById("saveButton"),
       resetAllButton: document.getElementById("resetAllButton")
     };
@@ -1129,11 +1265,54 @@
       "catchphrase",
       "businessDays",
       "businessHours",
-      "dataCenter",
-      "world",
+      "dataCenterWorld",
       "address",
       "xAccount"
     ];
+
+    const requiredInputs = [
+      { key: "photo", label: "メイン写真", element: () => elements.photoInput, isValid: () => Boolean(state.photo) },
+      { key: "characterName", label: "キャラクター名", element: () => elements.characterName, isValid: () => Boolean(state.characterName.trim()) },
+      { key: "venueName", label: "店名", element: () => elements.venueName, isValid: () => Boolean(state.venueName.trim()) },
+      { key: "businessDays", label: "営業日", element: () => elements.businessDays, isValid: () => Boolean(state.businessDays.trim()) },
+      { key: "businessHours", label: "営業時間", element: () => elements.businessHours, isValid: () => Boolean(state.businessHours.trim()) },
+      { key: "dataCenterWorld", label: "DC / ワールド", element: () => elements.dataCenterWorld, isValid: () => Boolean(state.dataCenterWorld.trim()) },
+      { key: "address", label: "住所", element: () => elements.address, isValid: () => Boolean(state.address.trim()) }
+    ];
+
+    function setSaveStatus(message = "", isError = false) {
+      if (!elements.saveStatus) return;
+      elements.saveStatus.textContent = message;
+      elements.saveStatus.classList.toggle("error", isError);
+    }
+
+    function clearInputValidation(input) {
+      if (!input) return;
+      input.classList.remove("is-invalid");
+      input.removeAttribute("aria-invalid");
+    }
+
+    function validateRequiredInputs() {
+      requiredInputs.forEach(item => clearInputValidation(item.element()));
+      const missing = requiredInputs.filter(item => !item.isValid());
+
+      if (!missing.length) {
+        setSaveStatus("");
+        return true;
+      }
+
+      missing.forEach(item => {
+        const input = item.element();
+        input.classList.add("is-invalid");
+        input.setAttribute("aria-invalid", "true");
+      });
+
+      setSaveStatus(`未入力の必須項目があります：${missing.map(item => item.label).join("、")}`, true);
+      const firstInput = missing[0].element();
+      firstInput.scrollIntoView({ behavior: "smooth", block: "center" });
+      window.setTimeout(() => firstInput.focus({ preventScroll: true }), 280);
+      return false;
+    }
 
     function getFontDefinition(fontKey) {
       return fontCatalog[fontKey] || fontCatalog.standardSans;
@@ -1848,25 +2027,17 @@
       }
       if (businessParts.length) rows.push({ label: "OPEN", parts: businessParts, strong: true });
 
-      const locationParts = [];
-      if (state.dataCenter.trim()) {
-        locationParts.push({
-          text: state.dataCenter.trim(),
-          fontKey: state.fonts.dataCenter,
-          weight: 600
+      const dataCenterWorld = state.dataCenterWorld.trim();
+      if (dataCenterWorld) {
+        rows.push({
+          label: "DC / WORLD",
+          parts: [{
+            text: dataCenterWorld,
+            fontKey: state.fonts.dataCenterWorld,
+            weight: 600
+          }]
         });
       }
-      if (state.dataCenter.trim() && state.world.trim()) {
-        locationParts.push({ text: "  /  ", fontKey: "standardSans", weight: 500 });
-      }
-      if (state.world.trim()) {
-        locationParts.push({
-          text: state.world.trim(),
-          fontKey: state.fonts.world,
-          weight: 600
-        });
-      }
-      if (locationParts.length) rows.push({ label: "WORLD", parts: locationParts });
 
       if (state.address.trim()) {
         rows.push({
@@ -1906,7 +2077,7 @@
         ctx.textAlign = "left";
         ctx.fillText(row.label, textLeft, y);
 
-        const labelWidth = 116;
+        const labelWidth = 124;
         const valueMaxWidth = maxTextWidth - labelWidth;
         const baseSize = row.strong ? 29 : 25;
         const minSize = row.strong ? 20 : 18;
@@ -2118,6 +2289,8 @@
       try {
         state.photo = await loadImageFromFile(file);
         state.photoFileName = file.name;
+        clearInputValidation(elements.photoInput);
+        setSaveStatus("");
         resetPhotoAdjustments();
       } catch (error) {
         window.alert(error.message);
@@ -2231,6 +2404,10 @@
     profileBindings.forEach(key => {
       elements[key].addEventListener("input", event => {
         state[key] = event.target.value;
+        if (event.target.value.trim()) {
+          clearInputValidation(event.target);
+          setSaveStatus("");
+        }
         renderCanvas();
         ensureFontReady(state.fonts[key], state[key]).then(renderCanvas);
       });
@@ -2266,11 +2443,16 @@
     });
 
     elements.saveButton.addEventListener("click", async () => {
+      if (!validateRequiredInputs()) return;
+
+      elements.saveButton.disabled = true;
+      setSaveStatus("保存画像を準備しています…");
       await ensureSelectedFontsReady();
       renderCanvas();
       canvas.toBlob(blob => {
         if (!blob) {
-          window.alert("PNG画像を保存できませんでした。ブラウザを更新して再度お試しください。");
+          elements.saveButton.disabled = false;
+          setSaveStatus("PNG画像を保存できませんでした。ブラウザを更新して再度お試しください。", true);
           return;
         }
 
@@ -2287,11 +2469,16 @@
         anchor.click();
         anchor.remove();
         window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+        elements.saveButton.disabled = false;
+        setSaveStatus("PNG画像を保存しました。");
       }, "image/png");
     });
 
     elements.resetAllButton.addEventListener("click", () => {
       state = initialState();
+      requiredInputs.forEach(item => clearInputValidation(item.element()));
+      setSaveStatus("");
+      elements.saveButton.disabled = false;
       syncControlsFromState();
       renderCanvas();
     });
