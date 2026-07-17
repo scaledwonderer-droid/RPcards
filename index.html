@@ -273,6 +273,7 @@
     }
 
     input[type="text"],
+    input[type="color"],
     select,
     input[type="file"] {
       width: 100%;
@@ -286,6 +287,7 @@
     }
 
     input[type="text"]:focus,
+    input[type="color"]:focus,
     select:focus,
     input[type="file"]:focus-visible,
     button:focus-visible {
@@ -481,6 +483,75 @@
       min-height: 41px;
     }
 
+    .color-toolbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: end;
+      padding-bottom: 13px;
+      border-bottom: 1px solid rgba(200, 162, 74, 0.15);
+    }
+
+    input[type="color"] {
+      min-height: 43px;
+      padding: 5px;
+    }
+
+    input[type="color"]::-webkit-color-swatch-wrapper {
+      padding: 0;
+    }
+
+    input[type="color"]::-webkit-color-swatch {
+      border: 0;
+      border-radius: 7px;
+    }
+
+    .text-style-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .text-style-control {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 70px;
+      gap: 10px;
+      align-items: center;
+      min-width: 0;
+      padding: 11px;
+      border: 1px solid #37332c;
+      border-radius: 11px;
+      background: rgba(8, 8, 8, 0.72);
+    }
+
+    .text-style-control > span {
+      grid-column: 1 / -1;
+      color: #e8e2d6;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .outline-toggle {
+      min-height: 43px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 7px;
+      border: 1px solid #3a362f;
+      border-radius: 9px;
+      background: #0c0c0c;
+      color: #ded8cc;
+      font-size: 0.78rem;
+      white-space: nowrap;
+    }
+
+    .outline-toggle input {
+      width: 16px;
+      height: 16px;
+    }
+
     .font-control select {
       min-width: 0;
     }
@@ -624,7 +695,8 @@
         min-height: 39px;
       }
 
-      .font-toolbar button {
+      .font-toolbar button,
+      .color-toolbar button {
         width: 100%;
       }
 
@@ -658,9 +730,10 @@
             <select id="themeSelect">
               <option value="blackGold">黒×金の王道ホスト風</option>
               <option value="whiteSilver">白×シルバーの上品系</option>
+              <option value="neonCity">ネオン×繁華街の現代風</option>
             </select>
           </label>
-          <p class="hint">現在は「黒×金の王道ホスト風」と「白×シルバーの上品系」を収録しています。テーマ設定は追加しやすい構成に分離しています。</p>
+          <p class="hint">現在は黒×金、白×シルバー、ネオン×繁華街の3テーマを収録しています。テーマ設定は追加しやすい構成に分離しています。</p>
         </div>
       </section>
 
@@ -945,7 +1018,88 @@
       </section>
 
       <section class="control-section">
-        <h2 class="section-title">5. QRコード</h2>
+        <h2 class="section-title">5. 文字色・縁取り</h2>
+        <div class="section-body">
+          <div class="color-toolbar">
+            <label class="field">
+              <span>まとめて使う文字色</span>
+              <input id="textColorAll" type="color" value="#F5F2EA" aria-label="すべての項目に適用する文字色">
+            </label>
+            <button id="applyAllTextColorsButton" type="button">全項目に適用</button>
+          </div>
+
+          <div class="field-grid">
+            <label class="field">
+              <span>縁取り色</span>
+              <input id="outlineColor" type="color" value="#000000">
+            </label>
+            <label class="field">
+              <span>縁取りの太さ</span>
+              <div class="range-wrap">
+                <input id="outlineWidth" type="range" min="1" max="10" value="5" step="1">
+                <output id="outlineWidthValue" class="range-value">5</output>
+              </div>
+            </label>
+          </div>
+
+          <div class="button-row">
+            <button id="enableAllOutlinesButton" type="button">全項目に縁取り</button>
+            <button id="disableAllOutlinesButton" type="button">縁取りをすべて解除</button>
+            <button id="resetTextStylesButton" type="button">テーマ標準に戻す</button>
+          </div>
+
+          <p class="hint">文字色は項目ごとに変更できます。縁取りは項目ごとに有無を選び、色と太さは共通で設定します。</p>
+
+          <details class="font-details">
+            <summary>項目ごとに文字色・縁取りを設定</summary>
+            <div class="text-style-grid">
+              <label class="text-style-control">
+                <span>キャラクター名</span>
+                <input class="item-text-color" data-text-target="characterName" type="color" aria-label="キャラクター名の文字色">
+                <span class="outline-toggle"><input class="item-outline-check" data-outline-target="characterName" type="checkbox">縁取り</span>
+              </label>
+              <label class="text-style-control">
+                <span>店名</span>
+                <input class="item-text-color" data-text-target="venueName" type="color" aria-label="店名の文字色">
+                <span class="outline-toggle"><input class="item-outline-check" data-outline-target="venueName" type="checkbox">縁取り</span>
+              </label>
+              <label class="text-style-control">
+                <span>キャッチコピー</span>
+                <input class="item-text-color" data-text-target="catchphrase" type="color" aria-label="キャッチコピーの文字色">
+                <span class="outline-toggle"><input class="item-outline-check" data-outline-target="catchphrase" type="checkbox">縁取り</span>
+              </label>
+              <label class="text-style-control">
+                <span>営業日</span>
+                <input class="item-text-color" data-text-target="businessDays" type="color" aria-label="営業日の文字色">
+                <span class="outline-toggle"><input class="item-outline-check" data-outline-target="businessDays" type="checkbox">縁取り</span>
+              </label>
+              <label class="text-style-control">
+                <span>営業時間</span>
+                <input class="item-text-color" data-text-target="businessHours" type="color" aria-label="営業時間の文字色">
+                <span class="outline-toggle"><input class="item-outline-check" data-outline-target="businessHours" type="checkbox">縁取り</span>
+              </label>
+              <label class="text-style-control">
+                <span>DC / ワールド</span>
+                <input class="item-text-color" data-text-target="dataCenterWorld" type="color" aria-label="DCとワールドの文字色">
+                <span class="outline-toggle"><input class="item-outline-check" data-outline-target="dataCenterWorld" type="checkbox">縁取り</span>
+              </label>
+              <label class="text-style-control">
+                <span>住所</span>
+                <input class="item-text-color" data-text-target="address" type="color" aria-label="住所の文字色">
+                <span class="outline-toggle"><input class="item-outline-check" data-outline-target="address" type="checkbox">縁取り</span>
+              </label>
+              <label class="text-style-control">
+                <span>Xアカウント</span>
+                <input class="item-text-color" data-text-target="xAccount" type="color" aria-label="Xアカウントの文字色">
+                <span class="outline-toggle"><input class="item-outline-check" data-outline-target="xAccount" type="checkbox">縁取り</span>
+              </label>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="control-section">
+        <h2 class="section-title">6. QRコード</h2>
         <div class="section-body">
           <label class="field">
             <span>QRコード画像（任意）</span>
@@ -959,7 +1113,7 @@
       </section>
 
       <section class="control-section">
-        <h2 class="section-title">6. 装飾</h2>
+        <h2 class="section-title">7. 装飾</h2>
         <div class="section-body">
           <div class="count-note">
             <span>最大3つまで選択できます</span>
@@ -987,7 +1141,7 @@
       </section>
 
       <section class="control-section">
-        <h2 class="section-title">7. 保存</h2>
+        <h2 class="section-title">8. 保存</h2>
         <div class="section-body">
           <div class="button-row">
             <button id="saveButton" class="primary" type="button">PNGで保存</button>
@@ -1198,25 +1352,25 @@
           background: "#F5F2EE",
           darkGray: "#E6E2DC",
           backgroundEnd: "#D8D4CD",
-          gold: "#8A919E",
-          goldLight: "#F8FBFF",
-          goldDark: "#646C78",
+          gold: "#7D8795",
+          goldLight: "#FFFFFF",
+          goldDark: "#515B69",
           white: "#FFFFFF",
           muted: "#56606D",
-          panel: "rgba(255, 255, 255, 0.84)",
-          panelLine: "rgba(138, 145, 158, 0.48)",
-          title: "#646C78",
+          panel: "rgba(255, 255, 255, 0.88)",
+          panelLine: "rgba(125, 135, 149, 0.60)",
+          title: "#5C6674",
           subtitle: "#363C45",
-          titleShadow: "rgba(255,255,255,0.78)",
-          titlePlaceholder: "#8A919E",
-          catchShadow: "rgba(255,255,255,0.75)",
-          panelLabel: "#7B8491",
+          titleShadow: "rgba(255,255,255,0.82)",
+          titlePlaceholder: "#7D8795",
+          catchShadow: "rgba(255,255,255,0.78)",
+          panelLabel: "#707A88",
           panelValueStrong: "#262B32",
           panelValueNormal: "#4B5560",
-          nameStroke: "rgba(28, 33, 41, 0.92)",
-          nameGlow: "rgba(255, 255, 255, 0.66)",
-          footer: "rgba(86, 96, 109, 0.82)",
-          qrBorder: "rgba(138, 145, 158, 0.75)"
+          nameStroke: "rgba(28, 33, 41, 0.94)",
+          nameGlow: "rgba(255, 255, 255, 0.72)",
+          footer: "rgba(86, 96, 109, 0.84)",
+          qrBorder: "rgba(125, 135, 149, 0.82)"
         },
         typography: {
           serif: "Georgia, 'Times New Roman', serif",
@@ -1230,12 +1384,60 @@
           qrSize: 158
         },
         decoration: {
-          lineMain: 2.05,
-          lineFine: 1.05,
-          glow: 4,
-          alpha: 0.76,
-          cardScale: 0.86,
-          bottleScale: 0.9
+          lineMain: 2.35,
+          lineFine: 1.18,
+          glow: 7,
+          alpha: 0.92,
+          cardScale: 0.9,
+          bottleScale: 0.98
+        }
+      },
+      neonCity: {
+        name: "ネオン×繁華街の現代風",
+        mode: "dark",
+        style: "neon",
+        colors: {
+          background: "#050611",
+          darkGray: "#101329",
+          backgroundEnd: "#02030A",
+          gold: "#E83BFF",
+          goldLight: "#55F6FF",
+          goldDark: "#7657FF",
+          white: "#F7FBFF",
+          muted: "#BCC8D9",
+          panel: "rgba(5, 8, 22, 0.88)",
+          panelLine: "rgba(85, 246, 255, 0.52)",
+          title: "#55F6FF",
+          subtitle: "#F7FBFF",
+          titleShadow: "rgba(232, 59, 255, 0.70)",
+          titlePlaceholder: "#E83BFF",
+          catchShadow: "rgba(85, 246, 255, 0.58)",
+          panelLabel: "#55F6FF",
+          panelValueStrong: "#FFFFFF",
+          panelValueNormal: "#C9D4E5",
+          nameStroke: "rgba(3, 4, 13, 0.96)",
+          nameGlow: "rgba(232, 59, 255, 0.82)",
+          footer: "rgba(188, 200, 217, 0.82)",
+          qrBorder: "rgba(85, 246, 255, 0.82)"
+        },
+        typography: {
+          serif: "Georgia, 'Times New Roman', serif",
+          sans: "'Yu Gothic UI', 'Yu Gothic', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif"
+        },
+        layout: {
+          outerMargin: 28,
+          photo: { x: 42, y: 142, width: 816, height: 1008 },
+          header: { x: 58, y: 34, width: 784, height: 142 },
+          infoPanel: { x: 42, y: 1080, width: 816, height: 342 },
+          qrSize: 158
+        },
+        decoration: {
+          lineMain: 2.55,
+          lineFine: 1.15,
+          glow: 13,
+          alpha: 0.92,
+          cardScale: 0.92,
+          bottleScale: 0.96
         }
       }
     };
@@ -1270,6 +1472,30 @@
         address: "zenMaruGothic",
         xAccount: "zenMaruGothic"
       },
+
+      textColors: {
+        characterName: null,
+        venueName: null,
+        catchphrase: null,
+        businessDays: null,
+        businessHours: null,
+        dataCenterWorld: null,
+        address: null,
+        xAccount: null
+      },
+
+      textOutlines: {
+        characterName: true,
+        venueName: false,
+        catchphrase: false,
+        businessDays: false,
+        businessHours: false,
+        dataCenterWorld: false,
+        address: false,
+        xAccount: false
+      },
+      outlineColor: "#000000",
+      outlineWidth: 5,
 
       qrImage: null,
       qrFileName: "",
@@ -1321,6 +1547,14 @@
       fontAllSelect: document.getElementById("fontAllSelect"),
       fontStatus: document.getElementById("fontStatus"),
       applyAllFontsButton: document.getElementById("applyAllFontsButton"),
+      textColorAll: document.getElementById("textColorAll"),
+      applyAllTextColorsButton: document.getElementById("applyAllTextColorsButton"),
+      outlineColor: document.getElementById("outlineColor"),
+      outlineWidth: document.getElementById("outlineWidth"),
+      outlineWidthValue: document.getElementById("outlineWidthValue"),
+      enableAllOutlinesButton: document.getElementById("enableAllOutlinesButton"),
+      disableAllOutlinesButton: document.getElementById("disableAllOutlinesButton"),
+      resetTextStylesButton: document.getElementById("resetTextStylesButton"),
       qrInput: document.getElementById("qrInput"),
       removeQrButton: document.getElementById("removeQrButton"),
       decorationCount: document.getElementById("decorationCount"),
@@ -1512,6 +1746,124 @@
       });
     }
 
+    function getThemeTextColor(key, theme) {
+      const colors = theme.colors;
+      const defaults = {
+        characterName: colors.goldLight || colors.white,
+        venueName: colors.title || colors.goldLight,
+        catchphrase: colors.subtitle || colors.white,
+        businessDays: colors.panelValueStrong || colors.white,
+        businessHours: colors.panelValueStrong || colors.white,
+        dataCenterWorld: colors.panelValueNormal || colors.muted,
+        address: colors.panelValueNormal || colors.muted,
+        xAccount: colors.panelValueNormal || colors.muted
+      };
+      return defaults[key] || colors.white || "#FFFFFF";
+    }
+
+    function getTextColor(key, theme, fallback) {
+      return state.textColors[key] || fallback || getThemeTextColor(key, theme);
+    }
+
+    function getScaledOutlineWidth(fontSize) {
+      return Math.max(1, state.outlineWidth * (fontSize / 50));
+    }
+
+    function strokeTextForItem(key, text, x, y, fontSize) {
+      if (!key || !state.textOutlines[key]) return;
+      ctx.save();
+      ctx.strokeStyle = state.outlineColor;
+      ctx.lineWidth = getScaledOutlineWidth(fontSize);
+      ctx.lineJoin = "round";
+      ctx.miterLimit = 2;
+      ctx.strokeText(text, x, y);
+      ctx.restore();
+    }
+
+    function syncTextStyleControls() {
+      const theme = themes[state.theme];
+      document.querySelectorAll(".item-text-color").forEach(input => {
+        const key = input.dataset.textTarget;
+        input.value = state.textColors[key] || getThemeTextColor(key, theme);
+      });
+      document.querySelectorAll(".item-outline-check").forEach(input => {
+        const key = input.dataset.outlineTarget;
+        input.checked = Boolean(state.textOutlines[key]);
+      });
+      elements.outlineColor.value = state.outlineColor;
+      elements.outlineWidth.value = String(state.outlineWidth);
+      elements.outlineWidthValue.value = String(state.outlineWidth);
+      elements.textColorAll.value = getThemeTextColor("venueName", theme);
+    }
+
+    function resetTextStyles() {
+      fontTargets.forEach(({ key }) => {
+        state.textColors[key] = null;
+        state.textOutlines[key] = key === "characterName";
+      });
+      state.outlineColor = "#000000";
+      state.outlineWidth = 5;
+      syncTextStyleControls();
+      renderCanvas();
+    }
+
+    function setupTextStyleControls() {
+      document.querySelectorAll(".item-text-color").forEach(input => {
+        input.addEventListener("input", event => {
+          const key = event.target.dataset.textTarget;
+          state.textColors[key] = event.target.value;
+          renderCanvas();
+        });
+      });
+
+      document.querySelectorAll(".item-outline-check").forEach(input => {
+        input.addEventListener("change", event => {
+          const key = event.target.dataset.outlineTarget;
+          state.textOutlines[key] = event.target.checked;
+          renderCanvas();
+        });
+      });
+
+      elements.applyAllTextColorsButton.addEventListener("click", () => {
+        const color = elements.textColorAll.value;
+        fontTargets.forEach(({ key }) => {
+          state.textColors[key] = color;
+        });
+        syncTextStyleControls();
+        renderCanvas();
+      });
+
+      elements.outlineColor.addEventListener("input", event => {
+        state.outlineColor = event.target.value;
+        renderCanvas();
+      });
+
+      elements.outlineWidth.addEventListener("input", event => {
+        state.outlineWidth = Number(event.target.value);
+        elements.outlineWidthValue.value = String(state.outlineWidth);
+        renderCanvas();
+      });
+
+      elements.enableAllOutlinesButton.addEventListener("click", () => {
+        fontTargets.forEach(({ key }) => {
+          state.textOutlines[key] = true;
+        });
+        syncTextStyleControls();
+        renderCanvas();
+      });
+
+      elements.disableAllOutlinesButton.addEventListener("click", () => {
+        fontTargets.forEach(({ key }) => {
+          state.textOutlines[key] = false;
+        });
+        syncTextStyleControls();
+        renderCanvas();
+      });
+
+      elements.resetTextStylesButton.addEventListener("click", resetTextStyles);
+      syncTextStyleControls();
+    }
+
     function roundedRectPath(context, x, y, width, height, radius) {
       const r = Math.min(radius, width / 2, height / 2);
       context.beginPath();
@@ -1526,6 +1878,7 @@
     function drawBackground(theme) {
       const { colors } = theme;
       const isLight = theme.mode === "light";
+      const isNeon = theme.style === "neon";
       const base = ctx.createLinearGradient(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
       base.addColorStop(0, colors.background);
       base.addColorStop(0.48, colors.darkGray);
@@ -1534,14 +1887,25 @@
       ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
       const glowTop = ctx.createRadialGradient(450, 90, 20, 450, 90, 520);
-      glowTop.addColorStop(0, isLight ? "rgba(255,255,255,0.78)" : "rgba(228, 200, 117, 0.16)");
-      glowTop.addColorStop(0.38, isLight ? "rgba(138,145,158,0.14)" : "rgba(126, 100, 44, 0.06)");
+      if (isNeon) {
+        glowTop.addColorStop(0, "rgba(85,246,255,0.22)");
+        glowTop.addColorStop(0.38, "rgba(232,59,255,0.12)");
+      } else {
+        glowTop.addColorStop(0, isLight ? "rgba(255,255,255,0.78)" : "rgba(228, 200, 117, 0.16)");
+        glowTop.addColorStop(0.38, isLight ? "rgba(138,145,158,0.14)" : "rgba(126, 100, 44, 0.06)");
+      }
       glowTop.addColorStop(1, "rgba(0, 0, 0, 0)");
       ctx.fillStyle = glowTop;
       ctx.fillRect(0, 0, CANVAS_WIDTH, 620);
 
       const velvet = ctx.createLinearGradient(0, 0, CANVAS_WIDTH, 0);
-      if (isLight) {
+      if (isNeon) {
+        velvet.addColorStop(0, "rgba(85,246,255,0.035)");
+        velvet.addColorStop(0.22, "rgba(0,0,0,0.07)");
+        velvet.addColorStop(0.5, "rgba(232,59,255,0.045)");
+        velvet.addColorStop(0.78, "rgba(0,0,0,0.10)");
+        velvet.addColorStop(1, "rgba(118,87,255,0.04)");
+      } else if (isLight) {
         velvet.addColorStop(0, "rgba(255,255,255,0.38)");
         velvet.addColorStop(0.22, "rgba(138,145,158,0.08)");
         velvet.addColorStop(0.5, "rgba(255,255,255,0.18)");
@@ -1557,8 +1921,58 @@
       ctx.fillStyle = velvet;
       ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
+      if (isNeon) {
+        ctx.save();
+        ctx.globalCompositeOperation = "screen";
+
+        const cyanGlow = ctx.createRadialGradient(70, 520, 10, 70, 520, 300);
+        cyanGlow.addColorStop(0, "rgba(85,246,255,0.18)");
+        cyanGlow.addColorStop(1, "rgba(85,246,255,0)");
+        ctx.fillStyle = cyanGlow;
+        ctx.fillRect(0, 180, 380, 760);
+
+        const magentaGlow = ctx.createRadialGradient(835, 720, 10, 835, 720, 340);
+        magentaGlow.addColorStop(0, "rgba(232,59,255,0.18)");
+        magentaGlow.addColorStop(1, "rgba(232,59,255,0)");
+        ctx.fillStyle = magentaGlow;
+        ctx.fillRect(500, 300, 400, 850);
+
+        ctx.lineCap = "round";
+        const lightBars = [
+          { x: 63, y: 250, h: 330, color: "rgba(85,246,255,0.22)" },
+          { x: 91, y: 350, h: 220, color: "rgba(85,246,255,0.10)" },
+          { x: 808, y: 280, h: 390, color: "rgba(232,59,255,0.20)" },
+          { x: 838, y: 410, h: 250, color: "rgba(118,87,255,0.12)" }
+        ];
+        lightBars.forEach(bar => {
+          ctx.strokeStyle = bar.color;
+          ctx.lineWidth = 3;
+          ctx.shadowColor = bar.color;
+          ctx.shadowBlur = 18;
+          ctx.beginPath();
+          ctx.moveTo(bar.x, bar.y);
+          ctx.lineTo(bar.x, bar.y + bar.h);
+          ctx.stroke();
+        });
+
+        ctx.globalAlpha = 0.26;
+        [
+          [118, 260, 5, colors.goldLight], [780, 225, 4, colors.gold],
+          [92, 720, 3, colors.gold], [812, 880, 5, colors.goldLight],
+          [738, 410, 3, colors.goldDark], [164, 930, 4, colors.goldLight]
+        ].forEach(([x, y, r, color]) => {
+          ctx.fillStyle = color;
+          ctx.shadowColor = color;
+          ctx.shadowBlur = 18;
+          ctx.beginPath();
+          ctx.arc(x, y, r, 0, Math.PI * 2);
+          ctx.fill();
+        });
+        ctx.restore();
+      }
+
       ctx.save();
-      ctx.globalAlpha = isLight ? 0.08 : 0.06;
+      ctx.globalAlpha = isNeon ? 0.075 : (isLight ? 0.08 : 0.06);
       ctx.strokeStyle = colors.goldDark;
       ctx.lineWidth = 1;
       for (let i = -CANVAS_HEIGHT; i < CANVAS_WIDTH; i += 54) {
@@ -1579,8 +1993,13 @@
 
       if (!state.photo) {
         const isLight = theme.mode === "light";
+        const isNeon = theme.style === "neon";
         const emptyGradient = ctx.createLinearGradient(photoBox.x, photoBox.y, photoBox.x, photoBox.y + photoBox.height);
-        if (isLight) {
+        if (isNeon) {
+          emptyGradient.addColorStop(0, "#11142B");
+          emptyGradient.addColorStop(0.55, "#080A18");
+          emptyGradient.addColorStop(1, "#050611");
+        } else if (isLight) {
           emptyGradient.addColorStop(0, "#F1EEEA");
           emptyGradient.addColorStop(0.55, "#E3DFD8");
           emptyGradient.addColorStop(1, "#D7D3CD");
@@ -1593,13 +2012,13 @@
         ctx.fillRect(photoBox.x, photoBox.y, photoBox.width, photoBox.height);
 
         const halo = ctx.createRadialGradient(450, 590, 30, 450, 590, 360);
-        halo.addColorStop(0, isLight ? "rgba(255,255,255,0.58)" : "rgba(228, 200, 117, 0.12)");
+        halo.addColorStop(0, isNeon ? "rgba(85,246,255,0.16)" : (isLight ? "rgba(255,255,255,0.58)" : "rgba(228, 200, 117, 0.12)"));
         halo.addColorStop(1, "rgba(0,0,0,0)");
         ctx.fillStyle = halo;
         ctx.fillRect(photoBox.x, photoBox.y, photoBox.width, photoBox.height);
 
         ctx.save();
-        ctx.globalAlpha = isLight ? 0.28 : 0.2;
+        ctx.globalAlpha = isNeon ? 0.42 : (isLight ? 0.28 : 0.2);
         ctx.fillStyle = theme.colors.goldLight;
         ctx.font = `700 36px ${theme.typography.serif}`;
         ctx.textAlign = "center";
@@ -1649,11 +2068,32 @@
       frameGradient.addColorStop(1, colors.goldDark);
 
       ctx.strokeStyle = frameGradient;
-      ctx.lineWidth = 3;
+      ctx.lineWidth = theme.mode === "light" ? 3.4 : 3;
       roundedRectPath(ctx, 20, 20, 860, 1460, 12);
       ctx.stroke();
 
-      ctx.globalAlpha = 0.46;
+      if (theme.mode === "light") {
+        ctx.save();
+        ctx.globalAlpha = 0.78;
+        ctx.strokeStyle = "rgba(255,255,255,0.85)";
+        ctx.lineWidth = 1.2;
+        roundedRectPath(ctx, 25, 25, 850, 1450, 10);
+        ctx.stroke();
+        ctx.restore();
+      } else if (theme.style === "neon") {
+        ctx.save();
+        ctx.globalCompositeOperation = "screen";
+        ctx.globalAlpha = 0.72;
+        ctx.strokeStyle = "rgba(85,246,255,0.72)";
+        ctx.shadowColor = "rgba(85,246,255,0.85)";
+        ctx.shadowBlur = 12;
+        ctx.lineWidth = 1.15;
+        roundedRectPath(ctx, 25, 25, 850, 1450, 10);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      ctx.globalAlpha = theme.mode === "light" ? 0.62 : (theme.style === "neon" ? 0.58 : 0.46);
       ctx.lineWidth = 1;
       roundedRectPath(ctx, 31, 31, 838, 1438, 8);
       ctx.stroke();
@@ -1680,7 +2120,9 @@
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
       ctx.globalAlpha = alpha;
-      ctx.shadowColor = theme.mode === "light" ? "rgba(255,255,255,0.42)" : "rgba(228, 200, 117, 0.32)";
+      ctx.shadowColor = theme.mode === "light"
+        ? "rgba(255,255,255,0.55)"
+        : (theme.style === "neon" ? "rgba(85,246,255,0.58)" : "rgba(228, 200, 117, 0.32)");
       ctx.shadowBlur = glow;
 
       const corners = [
@@ -1784,7 +2226,9 @@
         ctx.lineCap = "round";
         ctx.lineJoin = "round";
         ctx.globalAlpha = alpha;
-        ctx.shadowColor = theme.mode === "light" ? "rgba(255,255,255,0.4)" : "rgba(228, 200, 117, 0.4)";
+        ctx.shadowColor = theme.mode === "light"
+          ? "rgba(255,255,255,0.52)"
+          : (theme.style === "neon" ? "rgba(232,59,255,0.62)" : "rgba(228, 200, 117, 0.4)");
         ctx.shadowBlur = glow;
 
         ctx.lineWidth = lineMain;
@@ -1857,23 +2301,55 @@
     }
 
     function drawSparkle(x, y, radius, color, alpha = 1) {
+      const theme = themes[state.theme];
+      const isNeon = theme.style === "neon";
       ctx.save();
       ctx.translate(x, y);
-      ctx.strokeStyle = color;
       ctx.globalAlpha = alpha;
-      ctx.lineWidth = 2;
-      ctx.shadowColor = "rgba(228, 200, 117, 0.55)";
-      ctx.shadowBlur = 8;
-      ctx.beginPath();
-      ctx.moveTo(-radius, 0);
-      ctx.lineTo(radius, 0);
-      ctx.moveTo(0, -radius);
-      ctx.lineTo(0, radius);
-      ctx.moveTo(-radius * 0.55, -radius * 0.55);
-      ctx.lineTo(radius * 0.55, radius * 0.55);
-      ctx.moveTo(radius * 0.55, -radius * 0.55);
-      ctx.lineTo(-radius * 0.55, radius * 0.55);
-      ctx.stroke();
+      if (theme.mode === "light") {
+        ctx.strokeStyle = theme.colors.goldDark;
+        ctx.lineWidth = 2.4;
+        ctx.shadowColor = "rgba(255,255,255,0.62)";
+        ctx.shadowBlur = 10;
+        ctx.beginPath();
+        ctx.moveTo(-radius, 0);
+        ctx.lineTo(radius, 0);
+        ctx.moveTo(0, -radius);
+        ctx.lineTo(0, radius);
+        ctx.moveTo(-radius * 0.55, -radius * 0.55);
+        ctx.lineTo(radius * 0.55, radius * 0.55);
+        ctx.moveTo(radius * 0.55, -radius * 0.55);
+        ctx.lineTo(-radius * 0.55, radius * 0.55);
+        ctx.stroke();
+
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.moveTo(-radius, 0);
+        ctx.lineTo(radius, 0);
+        ctx.moveTo(0, -radius);
+        ctx.lineTo(0, radius);
+        ctx.moveTo(-radius * 0.55, -radius * 0.55);
+        ctx.lineTo(radius * 0.55, radius * 0.55);
+        ctx.moveTo(radius * 0.55, -radius * 0.55);
+        ctx.lineTo(-radius * 0.55, radius * 0.55);
+        ctx.stroke();
+      } else {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = isNeon ? 2.25 : 2;
+        ctx.shadowColor = isNeon ? color : "rgba(228, 200, 117, 0.55)";
+        ctx.shadowBlur = isNeon ? 13 : 8;
+        ctx.beginPath();
+        ctx.moveTo(-radius, 0);
+        ctx.lineTo(radius, 0);
+        ctx.moveTo(0, -radius);
+        ctx.lineTo(0, radius);
+        ctx.moveTo(-radius * 0.55, -radius * 0.55);
+        ctx.lineTo(radius * 0.55, radius * 0.55);
+        ctx.moveTo(radius * 0.55, -radius * 0.55);
+        ctx.lineTo(-radius * 0.55, radius * 0.55);
+        ctx.stroke();
+      }
       ctx.restore();
     }
 
@@ -1882,54 +2358,61 @@
       const decoration = theme.decoration || {};
       const scale = decoration.cardScale || 0.9;
       const lineMain = decoration.lineMain || 2.4;
+      const lineFine = decoration.lineFine || 1.2;
+      const cardTextColor = theme.mode === "light" ? "#4f5865" : colors.goldLight;
+      const cardFillAccent = theme.mode === "light"
+        ? "rgba(125,135,149,0.18)"
+        : (theme.style === "neon" ? "rgba(232,59,255,0.12)" : "rgba(200, 162, 74, 0.08)");
+
       ctx.save();
       ctx.translate(122, 885);
       ctx.scale(scale, scale);
       ctx.globalAlpha = (decoration.alpha || 0.84) * 0.92;
-      ctx.shadowColor = theme.mode === "light" ? "rgba(255,255,255,0.32)" : "rgba(228, 200, 117, 0.34)";
+      ctx.shadowColor = theme.mode === "light"
+        ? "rgba(255,255,255,0.48)"
+        : (theme.style === "neon" ? "rgba(232,59,255,0.58)" : "rgba(228, 200, 117, 0.34)");
       ctx.shadowBlur = decoration.glow || 6;
 
       const cardGradient = ctx.createLinearGradient(0, 0, 0, 200);
       if (theme.mode === "light") {
-        cardGradient.addColorStop(0, "rgba(255,255,255,0.88)");
-        cardGradient.addColorStop(1, "rgba(226,229,234,0.84)");
+        cardGradient.addColorStop(0, "rgba(255,255,255,0.90)");
+        cardGradient.addColorStop(1, "rgba(226,229,234,0.86)");
       } else {
         cardGradient.addColorStop(0, "rgba(31, 27, 18, 0.9)");
         cardGradient.addColorStop(1, "rgba(5, 5, 5, 0.93)");
       }
 
-      function drawOneCard(rotation, x, y, symbolScale, front = false) {
-        ctx.save();
-        ctx.translate(x, y);
-        ctx.rotate(rotation);
+      function drawCardBase() {
         roundedRectPath(ctx, -52, -78, 104, 156, 10);
         ctx.fillStyle = cardGradient;
         ctx.fill();
-        ctx.strokeStyle = front ? colors.goldLight : colors.gold;
-        ctx.lineWidth = front ? lineMain + 0.2 : lineMain;
         ctx.stroke();
 
         ctx.beginPath();
         roundedRectPath(ctx, -44, -70, 88, 140, 7);
         ctx.lineWidth = 0.9;
-        ctx.globalAlpha = 0.5;
+        ctx.globalAlpha *= 0.58;
         ctx.stroke();
-        ctx.globalAlpha = (decoration.alpha || 0.84) * 0.92;
-
-        ctx.fillStyle = front ? colors.goldLight : colors.gold;
-        ctx.font = `700 17px ${theme.typography.serif}`;
-        ctx.textAlign = "left";
-        ctx.fillText("A", -38, -49);
-        drawSpade(0, 2, 24 * symbolScale);
-        ctx.restore();
+        ctx.globalAlpha /= 0.58;
       }
 
-      drawOneCard(-0.3, -30, 10, 0.75, false);
-      drawOneCard(0.25, 34, 8, 0.75, false);
-      drawOneCard(-0.015, 0, -8, 0.95, true);
-      ctx.restore();
+      function drawCornerLabel(rank, suit, color) {
+        ctx.fillStyle = color;
+        ctx.font = `700 16px ${theme.typography.serif}`;
+        ctx.textAlign = "left";
+        ctx.fillText(rank, -37, -49);
+        ctx.font = `700 12px ${theme.typography.serif}`;
+        ctx.fillText(suit, -36, -33);
 
-      function drawSpade(x, y, size) {
+        ctx.textAlign = "right";
+        ctx.font = `700 16px ${theme.typography.serif}`;
+        ctx.fillText(rank, 37, 62);
+        ctx.font = `700 12px ${theme.typography.serif}`;
+        ctx.fillText(suit, 36, 47);
+      }
+
+      function drawSpade(x, y, size, color) {
+        ctx.fillStyle = color;
         ctx.beginPath();
         ctx.moveTo(x, y - size);
         ctx.bezierCurveTo(x - size * 0.9, y - size * 0.1, x - size * 0.68, y + size * 0.5, x, y + size * 0.1);
@@ -1942,6 +2425,114 @@
         ctx.lineTo(x + size * 0.16, y + size * 0.08);
         ctx.fill();
       }
+
+      function drawHeart(x, y, size, color) {
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.moveTo(x, y + size * 0.88);
+        ctx.bezierCurveTo(x - size * 1.1, y + size * 0.18, x - size * 1.06, y - size * 0.84, x, y - size * 0.22);
+        ctx.bezierCurveTo(x + size * 1.06, y - size * 0.84, x + size * 1.1, y + size * 0.18, x, y + size * 0.88);
+        ctx.fill();
+      }
+
+      function drawDiamond(x, y, size, color) {
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.moveTo(x, y - size);
+        ctx.lineTo(x + size * 0.8, y);
+        ctx.lineTo(x, y + size);
+        ctx.lineTo(x - size * 0.8, y);
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      function drawTarotMotif() {
+        ctx.save();
+        ctx.fillStyle = cardFillAccent;
+        roundedRectPath(ctx, -36, -56, 72, 112, 8);
+        ctx.fill();
+
+        ctx.strokeStyle = colors.gold;
+        ctx.lineWidth = lineFine;
+        ctx.beginPath();
+        roundedRectPath(ctx, -30, -48, 60, 96, 6);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(0, -8, 18, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.fillStyle = cardTextColor;
+        ctx.beginPath();
+        ctx.arc(0, -8, 11, Math.PI * 0.15, Math.PI * 1.85);
+        ctx.lineTo(0, -8);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.strokeStyle = cardTextColor;
+        ctx.lineWidth = lineFine;
+        for (let i = 0; i < 8; i += 1) {
+          const angle = (Math.PI / 4) * i;
+          const inner = 24;
+          const outer = 33;
+          ctx.beginPath();
+          ctx.moveTo(Math.cos(angle) * inner, Math.sin(angle) * inner - 8);
+          ctx.lineTo(Math.cos(angle) * outer, Math.sin(angle) * outer - 8);
+          ctx.stroke();
+        }
+
+        ctx.beginPath();
+        ctx.moveTo(0, 16);
+        ctx.lineTo(-12, 40);
+        ctx.lineTo(0, 34);
+        ctx.lineTo(12, 40);
+        ctx.closePath();
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(0, 48, 4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function drawOneCard(rotation, x, y, type, front = false) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(rotation);
+        ctx.strokeStyle = front ? colors.goldLight : colors.gold;
+        ctx.lineWidth = front ? lineMain + 0.2 : lineMain;
+        drawCardBase();
+
+        if (type === "spadeAce") {
+          drawCornerLabel("A", "♠", cardTextColor);
+          drawSpade(0, 4, 24, cardTextColor);
+        } else if (type === "heartKing") {
+          drawCornerLabel("K", "♥", cardTextColor);
+          drawHeart(0, 2, 18, cardTextColor);
+          ctx.strokeStyle = cardTextColor;
+          ctx.lineWidth = lineFine;
+          ctx.beginPath();
+          ctx.moveTo(-14, -18);
+          ctx.lineTo(0, -34);
+          ctx.lineTo(14, -18);
+          ctx.stroke();
+        } else if (type === "tarotMoon") {
+          ctx.fillStyle = cardTextColor;
+          ctx.font = `700 11px ${theme.typography.serif}`;
+          ctx.textAlign = "center";
+          ctx.fillText("ARCANA", 0, -58);
+          drawTarotMotif();
+        } else if (type === "diamondQueen") {
+          drawCornerLabel("Q", "♦", cardTextColor);
+          drawDiamond(0, 2, 18, cardTextColor);
+        }
+        ctx.restore();
+      }
+
+      drawOneCard(-0.3, -30, 10, "spadeAce", false);
+      drawOneCard(0.25, 34, 8, "heartKing", false);
+      drawOneCard(-0.015, 0, -8, "tarotMoon", true);
+      ctx.restore();
     }
 
     function drawBottles(theme) {
@@ -1951,17 +2542,41 @@
       const scale = decoration.bottleScale || 0.92;
       const lineMain = decoration.lineMain || 2.4;
       const lineFine = decoration.lineFine || 1.2;
+      const isLight = theme.mode === "light";
+      const strokePrimary = isLight ? colors.goldDark : colors.goldLight;
+      const isNeon = theme.style === "neon";
+      const strokeSecondary = isLight
+        ? colors.gold
+        : (isNeon ? colors.gold : "rgba(228, 200, 117, 0.42)");
+      const fillGlass = isLight
+        ? "rgba(255,255,255,0.52)"
+        : (isNeon ? "rgba(85,246,255,0.10)" : "rgba(200, 162, 74, 0.14)");
+
       ctx.save();
-      ctx.translate(panel.x + panel.width - 230, panel.y + 22);
+      ctx.translate(panel.x + panel.width - 232, panel.y + 20);
       ctx.scale(scale, scale);
-      ctx.globalAlpha = (decoration.alpha || 0.84) * 0.94;
-      ctx.strokeStyle = colors.goldLight;
-      ctx.fillStyle = theme.mode === "light" ? "rgba(255,255,255,0.32)" : "rgba(200, 162, 74, 0.14)";
-      ctx.lineWidth = lineMain;
+      ctx.globalAlpha = (decoration.alpha || 0.84) * 0.96;
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
-      ctx.shadowColor = theme.mode === "light" ? "rgba(255,255,255,0.32)" : "rgba(228, 200, 117, 0.34)";
-      ctx.shadowBlur = decoration.glow || 6;
+      ctx.shadowColor = isLight
+        ? "rgba(255,255,255,0.52)"
+        : (isNeon ? "rgba(85,246,255,0.64)" : "rgba(228, 200, 117, 0.34)");
+      ctx.shadowBlur = isLight ? (decoration.glow || 6) + 3 : (decoration.glow || 6);
+
+      if (isLight) {
+        ctx.save();
+        ctx.fillStyle = "rgba(255,255,255,0.42)";
+        ctx.strokeStyle = "rgba(125,135,149,0.18)";
+        ctx.lineWidth = 1;
+        roundedRectPath(ctx, -8, -10, 220, 88, 22);
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      ctx.strokeStyle = strokePrimary;
+      ctx.fillStyle = fillGlass;
+      ctx.lineWidth = lineMain + (isLight ? 0.25 : 0);
 
       ctx.beginPath();
       ctx.moveTo(16, 52);
@@ -1976,7 +2591,8 @@
       ctx.fill();
       ctx.stroke();
 
-      ctx.lineWidth = lineFine;
+      ctx.lineWidth = lineFine + (isLight ? 0.2 : 0);
+      ctx.strokeStyle = strokeSecondary;
       ctx.beginPath();
       ctx.moveTo(21, 29);
       ctx.lineTo(38, 29);
@@ -1986,22 +2602,44 @@
       ctx.lineTo(39, 40);
       ctx.stroke();
 
+      if (isLight) {
+        ctx.strokeStyle = "rgba(255,255,255,0.88)";
+        ctx.lineWidth = 0.9;
+        ctx.beginPath();
+        ctx.moveTo(24, 8);
+        ctx.lineTo(24, 47);
+        ctx.stroke();
+      }
+
       function drawGlass(x, y, size) {
-        ctx.lineWidth = lineMain;
+        ctx.strokeStyle = strokePrimary;
+        ctx.fillStyle = fillGlass;
+        ctx.lineWidth = lineMain + (isLight ? 0.2 : 0);
         ctx.beginPath();
         ctx.moveTo(x - size, y);
         ctx.quadraticCurveTo(x - size * 0.68, y + size * 0.78, x, y + size * 0.9);
         ctx.quadraticCurveTo(x + size * 0.68, y + size * 0.78, x + size, y);
         ctx.closePath();
+        if (isLight) ctx.fill();
         ctx.stroke();
 
-        ctx.lineWidth = lineFine;
+        ctx.strokeStyle = strokeSecondary;
+        ctx.lineWidth = lineFine + (isLight ? 0.15 : 0);
         ctx.beginPath();
         ctx.moveTo(x, y + size * 0.9);
         ctx.lineTo(x, y + size * 1.95);
         ctx.moveTo(x - size * 0.58, y + size * 1.95);
         ctx.lineTo(x + size * 0.58, y + size * 1.95);
         ctx.stroke();
+
+        if (isLight) {
+          ctx.strokeStyle = "rgba(255,255,255,0.9)";
+          ctx.lineWidth = 0.9;
+          ctx.beginPath();
+          ctx.moveTo(x - size * 0.35, y + size * 0.18);
+          ctx.quadraticCurveTo(x - size * 0.12, y + size * 0.58, x - size * 0.06, y + size * 0.78);
+          ctx.stroke();
+        }
       }
 
       drawGlass(86, 14, 15);
@@ -2010,7 +2648,7 @@
       ctx.beginPath();
       ctx.moveTo(69, 20);
       ctx.lineTo(145, 20);
-      ctx.strokeStyle = theme.mode === "light" ? "rgba(138,145,158,0.42)" : "rgba(228, 200, 117, 0.42)";
+      ctx.strokeStyle = strokeSecondary;
       ctx.lineWidth = 1.1;
       ctx.stroke();
 
@@ -2034,6 +2672,10 @@
         innerGlow.addColorStop(0, "rgba(255,255,255,0.22)");
         innerGlow.addColorStop(0.5, "rgba(138,145,158,0.08)");
         innerGlow.addColorStop(1, "rgba(255,255,255,0.2)");
+      } else if (theme.style === "neon") {
+        innerGlow.addColorStop(0, "rgba(85,246,255,0.08)");
+        innerGlow.addColorStop(0.48, "rgba(232,59,255,0.13)");
+        innerGlow.addColorStop(1, "rgba(118,87,255,0.08)");
       } else {
         innerGlow.addColorStop(0, "rgba(228, 200, 117, 0.03)");
         innerGlow.addColorStop(0.5, "rgba(228, 200, 117, 0.11)");
@@ -2074,7 +2716,9 @@
       let currentX = x;
       parts.forEach(part => {
         ctx.font = makeCanvasFont(part.fontKey, size, part.weight, theme);
-        ctx.fillStyle = part.color || color;
+        const fillColor = part.key ? getTextColor(part.key, theme, part.color || color) : (part.color || color);
+        if (part.key) strokeTextForItem(part.key, part.text, currentX, y, size);
+        ctx.fillStyle = fillColor;
         ctx.fillText(part.text, currentX, y);
         currentX += ctx.measureText(part.text).width;
       });
@@ -2092,9 +2736,10 @@
         ctx.textBaseline = "middle";
         const size = fitFontSize(venue, layout.header.width - 70, 52, 28, fontKey, 700, theme);
         ctx.font = makeCanvasFont(fontKey, size, 700, theme);
-        ctx.fillStyle = colors.title || colors.goldLight;
+        ctx.fillStyle = getTextColor("venueName", theme, colors.title || colors.goldLight);
         ctx.shadowColor = colors.titleShadow || "rgba(0,0,0,0.9)";
         ctx.shadowBlur = theme.mode === "light" ? 10 : 12;
+        strokeTextForItem("venueName", venue, 450, 94, size);
         ctx.fillText(venue, 450, 94);
         ctx.restore();
       } else {
@@ -2114,9 +2759,10 @@
         ctx.textBaseline = "middle";
         const size = fitFontSize(catchphrase, 690, 25, 18, fontKey, 600, theme);
         ctx.font = makeCanvasFont(fontKey, size, 600, theme);
-        ctx.fillStyle = colors.subtitle || colors.white;
+        ctx.fillStyle = getTextColor("catchphrase", theme, colors.subtitle || colors.white);
         ctx.shadowColor = colors.catchShadow || "rgba(0,0,0,0.95)";
         ctx.shadowBlur = theme.mode === "light" ? 8 : 9;
+        strokeTextForItem("catchphrase", catchphrase, 450, 148, size);
         ctx.fillText(catchphrase, 450, 148);
         ctx.restore();
       }
@@ -2132,18 +2778,26 @@
       ctx.textBaseline = "middle";
       const size = fitFontSize(name, 770, 86, 30, fontKey, 700, theme);
       ctx.font = makeCanvasFont(fontKey, size, 700, theme);
-      ctx.lineWidth = Math.max(3, size * 0.065);
-      ctx.strokeStyle = theme.colors.nameStroke || "rgba(22, 16, 5, 0.95)";
       ctx.shadowColor = theme.colors.nameGlow || "rgba(0, 0, 0, 0.9)";
       ctx.shadowBlur = theme.mode === "light" ? 18 : 20;
-      ctx.strokeText(name, 450, 1010);
+      strokeTextForItem("characterName", name, 450, 1010, size);
       ctx.shadowBlur = 0;
 
-      const nameGradient = ctx.createLinearGradient(0, 960, 0, 1048);
-      nameGradient.addColorStop(0, theme.colors.white);
-      nameGradient.addColorStop(0.46, theme.colors.goldLight);
-      nameGradient.addColorStop(1, theme.colors.gold);
-      ctx.fillStyle = nameGradient;
+      if (state.textColors.characterName) {
+        ctx.fillStyle = state.textColors.characterName;
+      } else {
+        const nameGradient = ctx.createLinearGradient(0, 960, 0, 1048);
+        if (theme.style === "neon") {
+          nameGradient.addColorStop(0, theme.colors.white);
+          nameGradient.addColorStop(0.42, theme.colors.goldLight);
+          nameGradient.addColorStop(1, theme.colors.gold);
+        } else {
+          nameGradient.addColorStop(0, theme.colors.white);
+          nameGradient.addColorStop(0.46, theme.colors.goldLight);
+          nameGradient.addColorStop(1, theme.colors.gold);
+        }
+        ctx.fillStyle = nameGradient;
+      }
       ctx.fillText(name, 450, 1010);
       ctx.restore();
     }
@@ -2162,6 +2816,7 @@
       if (state.businessDays.trim()) {
         businessParts.push({
           text: state.businessDays.trim(),
+          key: "businessDays",
           fontKey: state.fonts.businessDays,
           weight: 700
         });
@@ -2172,6 +2827,7 @@
       if (state.businessHours.trim()) {
         businessParts.push({
           text: state.businessHours.trim(),
+          key: "businessHours",
           fontKey: state.fonts.businessHours,
           weight: 700
         });
@@ -2184,6 +2840,7 @@
           label: "DC / WORLD",
           parts: [{
             text: dataCenterWorld,
+            key: "dataCenterWorld",
             fontKey: state.fonts.dataCenterWorld,
             weight: 600
           }]
@@ -2193,13 +2850,13 @@
       if (state.address.trim()) {
         rows.push({
           label: "ADDRESS",
-          parts: [{ text: state.address.trim(), fontKey: state.fonts.address, weight: 600 }]
+          parts: [{ text: state.address.trim(), key: "address", fontKey: state.fonts.address, weight: 600 }]
         });
       }
       if (state.xAccount.trim()) {
         rows.push({
           label: "X",
-          parts: [{ text: state.xAccount.trim(), fontKey: state.fonts.xAccount, weight: 600 }]
+          parts: [{ text: state.xAccount.trim(), key: "xAccount", fontKey: state.fonts.xAccount, weight: 600 }]
         });
       }
 
@@ -2422,6 +3079,7 @@
         check.checked = Boolean(state.decorations[check.value]);
       });
 
+      syncTextStyleControls();
       elements.photoInput.value = "";
       elements.qrInput.value = "";
       updateRangeLabels();
@@ -2434,7 +3092,12 @@
         state.overlayOpacity = 0.24;
         elements.overlayOpacity.value = "24";
         updateRangeLabels();
+      } else if (state.theme === "neonCity" && state.overlayOpacity > 0.22) {
+        state.overlayOpacity = 0.22;
+        elements.overlayOpacity.value = "22";
+        updateRangeLabels();
       }
+      syncTextStyleControls();
       renderCanvas();
     });
 
@@ -2640,6 +3303,7 @@
     });
 
     setupFontControls();
+    setupTextStyleControls();
     syncControlsFromState();
     renderCanvas();
     ensureSelectedFontsReady().then(renderCanvas);
