@@ -1120,23 +1120,16 @@
             <strong id="decorationCount">0 / 3</strong>
           </div>
           <div class="check-grid">
-            <label class="choice-card">
-              <input class="decoration-check" type="checkbox" value="flourish">
-              唐草・曲線フレーム
-            </label>
-            <label class="choice-card">
-              <input class="decoration-check" type="checkbox" value="chandelier">
-              シャンデリア・きらめき
-            </label>
-            <label class="choice-card">
-              <input class="decoration-check" type="checkbox" value="cards">
-              トランプ・スペード系
-            </label>
-            <label class="choice-card">
-              <input class="decoration-check" type="checkbox" value="bottles">
-              ボトル・グラス系
-            </label>
+            <label class="choice-card"><input class="decoration-check" type="checkbox" value="flourish">唐草・曲線フレーム</label>
+            <label class="choice-card"><input class="decoration-check" type="checkbox" value="chandelier">シャンデリア・きらめき</label>
+            <label class="choice-card"><input class="decoration-check" type="checkbox" value="tarotCards">月・星・太陽の絵柄カード</label>
+            <label class="choice-card"><input class="decoration-check" type="checkbox" value="bottles">ボトル・グラス系</label>
+            <label class="choice-card"><input class="decoration-check" type="checkbox" value="guitarPick">ギターピック</label>
+            <label class="choice-card"><input class="decoration-check" type="checkbox" value="violin">ヴァイオリン</label>
+            <label class="choice-card"><input class="decoration-check" type="checkbox" value="teddyBear">テディベア</label>
+            <label class="choice-card"><input class="decoration-check" type="checkbox" value="cuteHearts">ハート</label>
           </div>
+          <p id="decorationStatus" class="hint form-status" aria-live="polite">装飾画像を読み込んでいます…</p>
         </div>
       </section>
 
@@ -1503,8 +1496,12 @@
       decorations: {
         flourish: false,
         chandelier: false,
-        cards: false,
-        bottles: false
+        tarotCards: false,
+        bottles: false,
+        guitarPick: false,
+        violin: false,
+        teddyBear: false,
+        cuteHearts: false
       }
     });
 
@@ -1558,6 +1555,7 @@
       qrInput: document.getElementById("qrInput"),
       removeQrButton: document.getElementById("removeQrButton"),
       decorationCount: document.getElementById("decorationCount"),
+      decorationStatus: document.getElementById("decorationStatus"),
       saveStatus: document.getElementById("saveStatus"),
       saveButton: document.getElementById("saveButton"),
       resetAllButton: document.getElementById("resetAllButton")
@@ -2938,6 +2936,99 @@
       ctx.restore();
     }
 
+    const decorationThemeFolders = {
+      blackGold: "blackgold",
+      whiteSilver: "whitesilver",
+      neonCity: "neon"
+    };
+
+    const decorationCatalog = {
+      flourish: { file: "flourish.png", x: 0, y: 0, width: 900, height: 1500, layer: "frame" },
+      chandelier: { file: "chandelier.png", x: 480, y: 115, width: 390, height: 390, layer: "foreground" },
+      tarotCards: { file: "tarot-cards.png", x: 12, y: 635, width: 385, height: 385, layer: "foreground" },
+      bottles: { file: "bottles.png", x: 555, y: 900, width: 330, height: 330, layer: "foreground" },
+      guitarPick: { file: "guitar-pick.png", x: 40, y: 260, width: 300, height: 300, layer: "foreground" },
+      violin: { file: "violin.png", x: 520, y: 260, width: 300, height: 450, layer: "foreground" },
+      teddyBear: { file: "teddy-bear.png", x: 20, y: 880, width: 320, height: 320, layer: "foreground" },
+      cuteHearts: { file: "cute-hearts.png", x: 545, y: 640, width: 300, height: 300, layer: "foreground" }
+    };
+
+    const decorationImages = new Map();
+    let decorationLoadPromise = null;
+    let decorationLoadError = "";
+
+    function decorationAssetKey(themeKey, decorationKey) {
+      return `${themeKey}:${decorationKey}`;
+    }
+
+    function loadDecorationImage(themeKey, decorationKey) {
+      const folder = decorationThemeFolders[themeKey];
+      const config = decorationCatalog[decorationKey];
+      const key = decorationAssetKey(themeKey, decorationKey);
+      if (decorationImages.has(key)) return Promise.resolve(decorationImages.get(key));
+
+      return new Promise((resolve, reject) => {
+        const image = new Image();
+        image.onload = () => {
+          decorationImages.set(key, image);
+          resolve(image);
+        };
+        image.onerror = () => reject(new Error(`${folder}/${config.file}`));
+        image.src = `./decorations/${folder}/${config.file}`;
+      });
+    }
+
+    function setDecorationStatus(message, isError = false) {
+      elements.decorationStatus.textContent = message;
+      elements.decorationStatus.classList.toggle("error", isError);
+    }
+
+    function preloadDecorationImages() {
+      if (decorationLoadPromise) return decorationLoadPromise;
+      setDecorationStatus("装飾画像を読み込んでいます…");
+      const jobs = Object.keys(decorationThemeFolders).flatMap(themeKey =>
+        Object.keys(decorationCatalog).map(decorationKey => loadDecorationImage(themeKey, decorationKey))
+      );
+      decorationLoadPromise = Promise.all(jobs)
+        .then(() => {
+          decorationLoadError = "";
+          setDecorationStatus("装飾画像の読み込みが完了しました。");
+          renderCanvas();
+        })
+        .catch(error => {
+          decorationLoadError = error.message || "不明な画像";
+          setDecorationStatus(`装飾画像を読み込めませんでした：${decorationLoadError}`, true);
+          throw error;
+        });
+      return decorationLoadPromise;
+    }
+
+    async function ensureSelectedDecorationsReady() {
+      const selected = Object.keys(state.decorations).filter(key => state.decorations[key]);
+      if (!selected.length) return;
+      await Promise.all(selected.map(key => loadDecorationImage(state.theme, key)));
+    }
+
+    function drawDecorationImage(themeKey, decorationKey) {
+      const image = decorationImages.get(decorationAssetKey(themeKey, decorationKey));
+      if (!image) return false;
+      const config = decorationCatalog[decorationKey];
+      ctx.save();
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+      ctx.drawImage(image, config.x, config.y, config.width, config.height);
+      ctx.restore();
+      return true;
+    }
+
+    function drawDecorationLayer(layer) {
+      Object.entries(state.decorations).forEach(([key, enabled]) => {
+        if (!enabled || decorationCatalog[key].layer !== layer) return;
+        drawDecorationImage(state.theme, key);
+      });
+    }
+
+
     function renderCanvas() {
       const theme = themes[state.theme];
       canvas.classList.toggle("photo-ready", Boolean(state.photo));
@@ -2946,18 +3037,21 @@
       drawBackground(theme);
       drawPhoto(theme);
       drawOuterFrame(theme);
-
-      if (state.decorations.flourish) drawFlourish(theme);
-      if (state.decorations.chandelier) drawChandelier(theme);
-      if (state.decorations.cards) drawCards(theme);
-
+      drawDecorationLayer("frame");
       drawInfoPanel(theme);
-      if (state.decorations.bottles) drawBottles(theme);
+      drawDecorationLayer("foreground");
       drawHeaderText(theme);
       drawCharacterName(theme);
       drawInformation(theme);
       drawQr(theme);
       drawFooter(theme);
+
+      const hasMissingSelected = Object.entries(state.decorations).some(([key, enabled]) =>
+        enabled && !decorationImages.has(decorationAssetKey(state.theme, key))
+      );
+      if (hasMissingSelected && !decorationLoadError) {
+        setDecorationStatus("選択した装飾画像を読み込んでいます…");
+      }
     }
 
     function loadImageFromFile(file) {
@@ -3099,6 +3193,10 @@
       }
       syncTextStyleControls();
       renderCanvas();
+      ensureSelectedDecorationsReady().then(() => {
+        setDecorationStatus("装飾画像の読み込みが完了しました。");
+        renderCanvas();
+      }).catch(error => setDecorationStatus(`装飾画像を読み込めませんでした：${error.message}`, true));
     });
 
     elements.photoInput.addEventListener("change", async event => {
@@ -3254,10 +3352,24 @@
     });
 
     document.querySelectorAll(".decoration-check").forEach(check => {
-      check.addEventListener("change", event => {
-        state.decorations[event.target.value] = event.target.checked;
+      check.addEventListener("change", async event => {
+        const key = event.target.value;
+        state.decorations[key] = event.target.checked;
         updateDecorationAvailability();
         renderCanvas();
+        if (!event.target.checked) return;
+        try {
+          setDecorationStatus("選択した装飾画像を読み込んでいます…");
+          await loadDecorationImage(state.theme, key);
+          setDecorationStatus("装飾画像の読み込みが完了しました。");
+          renderCanvas();
+        } catch (error) {
+          state.decorations[key] = false;
+          event.target.checked = false;
+          updateDecorationAvailability();
+          setDecorationStatus(`装飾画像を読み込めませんでした：${error.message}`, true);
+          renderCanvas();
+        }
       });
     });
 
@@ -3266,7 +3378,13 @@
 
       elements.saveButton.disabled = true;
       setSaveStatus("保存画像を準備しています…");
-      await ensureSelectedFontsReady();
+      try {
+        await Promise.all([ensureSelectedFontsReady(), ensureSelectedDecorationsReady()]);
+      } catch (error) {
+        elements.saveButton.disabled = false;
+        setSaveStatus(`装飾画像を読み込めないため保存できません：${error.message}`, true);
+        return;
+      }
       renderCanvas();
       canvas.toBlob(blob => {
         if (!blob) {
@@ -3306,6 +3424,7 @@
     setupTextStyleControls();
     syncControlsFromState();
     renderCanvas();
+    preloadDecorationImages().catch(() => {});
     ensureSelectedFontsReady().then(renderCanvas);
   </script>
 </body>
