@@ -2869,12 +2869,16 @@
         return;
       }
 
-      const contentTop = panel.y + 78;
-      const contentBottom = panel.y + panel.height - 38;
-      const rowGap = Math.min(62, (contentBottom - contentTop) / Math.max(rows.length, 1));
+      const contentTop = panel.y + 104;
+      const contentBottom = panel.y + panel.height - 48;
+      const rowGap = rows.length > 1
+        ? Math.min(56, (contentBottom - contentTop) / (rows.length - 1))
+        : 0;
+      const occupiedHeight = rowGap * Math.max(rows.length - 1, 0);
+      const startY = contentTop + Math.max(0, (contentBottom - contentTop - occupiedHeight) / 2);
 
       rows.forEach((row, index) => {
-        const y = contentTop + index * rowGap;
+        const y = startY + index * rowGap;
         ctx.save();
         ctx.textBaseline = "middle";
 
@@ -2901,7 +2905,7 @@
       const size = theme.layout.qrSize;
       const quiet = 12;
       const x = panel.x + panel.width - size - 30;
-      const y = panel.y + (panel.height - size) / 2 + 8;
+      const y = panel.y + panel.height - size - 18;
 
       ctx.save();
       ctx.fillStyle = "#FFFFFF";
@@ -2952,12 +2956,12 @@
           { x: 642, y: 82, width: 232, height: 232, mirrorX: true }
         ]
       },
-      tarotCards: { file: "tarot-cards.png", x: 0, y: 910, width: 316, height: 316, layer: "foreground" },
+      tarotCards: { file: "tarot-cards.png", x: -8, bottom: 950, width: 316, height: 316, layer: "foreground" },
       bottles: { file: "bottles.png", x: 620, y: 930, width: 271, height: 271, layer: "foreground" },
-      guitarPick: { file: "guitar-pick.png", x: 0, y: 910, width: 246, height: 246, layer: "foreground" },
-      violin: { file: "violin.png", x: 0, y: 910, width: 255, height: 383, layer: "foreground" },
-      teddyBear: { file: "teddy-bear.png", x: 0, y: 910, width: 262, height: 262, layer: "foreground" },
-      cuteHearts: { file: "cute-hearts.png", x: 0, y: 910, width: 240, height: 240, layer: "foreground" }
+      guitarPick: { file: "guitar-pick.png", x: -8, bottom: 950, width: 246, height: 246, layer: "foreground" },
+      violin: { file: "violin.png", x: -8, bottom: 950, width: 255, height: 383, layer: "foreground" },
+      teddyBear: { file: "teddy-bear.png", x: -8, bottom: 950, width: 262, height: 262, layer: "foreground" },
+      cuteHearts: { file: "cute-hearts.png", x: -8, bottom: 950, width: 240, height: 240, layer: "foreground" }
     };
 
     const decorationExclusiveGroups = [
@@ -3027,19 +3031,29 @@
       const config = decorationCatalog[decorationKey];
       const placements = Array.isArray(config.placements) && config.placements.length
         ? config.placements
-        : [{ x: config.x, y: config.y, width: config.width, height: config.height }];
+        : [{
+            x: config.x,
+            y: config.y,
+            bottom: config.bottom,
+            width: config.width,
+            height: config.height
+          }];
 
       placements.forEach(placement => {
+        const drawY = Number.isFinite(placement.y)
+          ? placement.y
+          : placement.bottom - placement.height;
+
         ctx.save();
         ctx.imageSmoothingEnabled = true;
         ctx.imageSmoothingQuality = "high";
 
         if (placement.mirrorX) {
-          ctx.translate(placement.x + placement.width, placement.y);
+          ctx.translate(placement.x + placement.width, drawY);
           ctx.scale(-1, 1);
           ctx.drawImage(image, 0, 0, placement.width, placement.height);
         } else {
-          ctx.drawImage(image, placement.x, placement.y, placement.width, placement.height);
+          ctx.drawImage(image, placement.x, drawY, placement.width, placement.height);
         }
 
         ctx.restore();
