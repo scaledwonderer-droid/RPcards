@@ -2944,7 +2944,14 @@
 
     const decorationCatalog = {
       flourish: { file: "flourish.png", x: 0, y: 0, width: 900, height: 1500, layer: "frame" },
-      chandelier: { file: "chandelier.png", x: 540, y: 90, width: 332, height: 332, layer: "foreground" },
+      chandelier: {
+        file: "chandelier.png",
+        layer: "foreground",
+        placements: [
+          { x: 26, y: 82, width: 232, height: 232 },
+          { x: 642, y: 82, width: 232, height: 232, mirrorX: true }
+        ]
+      },
       tarotCards: { file: "tarot-cards.png", x: 0, y: 670, width: 316, height: 316, layer: "foreground" },
       bottles: { file: "bottles.png", x: 620, y: 930, width: 271, height: 271, layer: "foreground" },
       guitarPick: { file: "guitar-pick.png", x: 20, y: 250, width: 246, height: 246, layer: "foreground" },
@@ -3013,11 +3020,26 @@
       const image = decorationImages.get(decorationAssetKey(themeKey, decorationKey));
       if (!image) return false;
       const config = decorationCatalog[decorationKey];
-      ctx.save();
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = "high";
-      ctx.drawImage(image, config.x, config.y, config.width, config.height);
-      ctx.restore();
+      const placements = Array.isArray(config.placements) && config.placements.length
+        ? config.placements
+        : [{ x: config.x, y: config.y, width: config.width, height: config.height }];
+
+      placements.forEach(placement => {
+        ctx.save();
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = "high";
+
+        if (placement.mirrorX) {
+          ctx.translate(placement.x + placement.width, placement.y);
+          ctx.scale(-1, 1);
+          ctx.drawImage(image, 0, 0, placement.width, placement.height);
+        } else {
+          ctx.drawImage(image, placement.x, placement.y, placement.width, placement.height);
+        }
+
+        ctx.restore();
+      });
+
       return true;
     }
 
