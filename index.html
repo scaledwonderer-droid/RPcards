@@ -2952,13 +2952,18 @@
           { x: 642, y: 82, width: 232, height: 232, mirrorX: true }
         ]
       },
-      tarotCards: { file: "tarot-cards.png", x: 0, y: 670, width: 316, height: 316, layer: "foreground" },
+      tarotCards: { file: "tarot-cards.png", x: 0, y: 910, width: 316, height: 316, layer: "foreground" },
       bottles: { file: "bottles.png", x: 620, y: 930, width: 271, height: 271, layer: "foreground" },
-      guitarPick: { file: "guitar-pick.png", x: 20, y: 250, width: 246, height: 246, layer: "foreground" },
-      violin: { file: "violin.png", x: 610, y: 260, width: 255, height: 383, layer: "foreground" },
+      guitarPick: { file: "guitar-pick.png", x: 0, y: 910, width: 246, height: 246, layer: "foreground" },
+      violin: { file: "violin.png", x: 0, y: 910, width: 255, height: 383, layer: "foreground" },
       teddyBear: { file: "teddy-bear.png", x: 0, y: 910, width: 262, height: 262, layer: "foreground" },
-      cuteHearts: { file: "cute-hearts.png", x: 650, y: 650, width: 240, height: 240, layer: "foreground" }
+      cuteHearts: { file: "cute-hearts.png", x: 0, y: 910, width: 240, height: 240, layer: "foreground" }
     };
+
+    const decorationExclusiveGroups = [
+      ["tarotCards", "guitarPick", "violin", "cuteHearts", "teddyBear"],
+      ["flourish", "chandelier"]
+    ];
 
     const decorationImages = new Map();
     let decorationLoadPromise = null;
@@ -3159,13 +3164,47 @@
       renderCanvas();
     }
 
+    function enforceDecorationRules(preferredKey = "") {
+      decorationExclusiveGroups.forEach(group => {
+        const selected = group.filter(key => state.decorations[key]);
+        if (selected.length <= 1) return;
+        const keepKey = preferredKey && selected.includes(preferredKey) ? preferredKey : selected[0];
+        selected.forEach(key => {
+          state.decorations[key] = key === keepKey;
+        });
+      });
+
+      const selectedKeys = Object.keys(state.decorations).filter(key => state.decorations[key]);
+      if (selectedKeys.length <= 3) return;
+
+      const keepKeys = [];
+      if (preferredKey && state.decorations[preferredKey]) {
+        keepKeys.push(preferredKey);
+      }
+      selectedKeys.forEach(key => {
+        if (keepKeys.length >= 3 || keepKeys.includes(key)) return;
+        keepKeys.push(key);
+      });
+      Object.keys(state.decorations).forEach(key => {
+        state.decorations[key] = keepKeys.includes(key);
+      });
+    }
+
     function updateDecorationAvailability() {
+      enforceDecorationRules();
       const checks = [...document.querySelectorAll(".decoration-check")];
-      const selectedCount = checks.filter(check => check.checked).length;
+      const selectedKeys = Object.keys(state.decorations).filter(key => state.decorations[key]);
+      const selectedCount = selectedKeys.length;
       elements.decorationCount.textContent = `${selectedCount} / 3`;
 
       checks.forEach(check => {
-        check.disabled = selectedCount >= 3 && !check.checked;
+        const key = check.value;
+        const isSelected = Boolean(state.decorations[key]);
+        const blockedByMax = selectedCount >= 3 && !isSelected;
+        const blockedByExclusiveGroup = decorationExclusiveGroups.some(group =>
+          group.includes(key) && group.some(otherKey => otherKey !== key && state.decorations[otherKey])
+        );
+        check.disabled = blockedByMax || (!isSelected && blockedByExclusiveGroup);
       });
     }
 
@@ -3377,9 +3416,10 @@
       check.addEventListener("change", async event => {
         const key = event.target.value;
         state.decorations[key] = event.target.checked;
-        updateDecorationAvailability();
+        enforceDecorationRules(key);
+        syncControlsFromState();
         renderCanvas();
-        if (!event.target.checked) return;
+        if (!state.decorations[key]) return;
         try {
           setDecorationStatus("選択した装飾画像を読み込んでいます…");
           await loadDecorationImage(state.theme, key);
@@ -3387,8 +3427,7 @@
           renderCanvas();
         } catch (error) {
           state.decorations[key] = false;
-          event.target.checked = false;
-          updateDecorationAvailability();
+          syncControlsFromState();
           setDecorationStatus(`装飾画像を読み込めませんでした：${error.message}`, true);
           renderCanvas();
         }
