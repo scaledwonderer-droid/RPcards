@@ -731,9 +731,13 @@
               <option value="blackGold">黒×金の王道ホスト風</option>
               <option value="whiteSilver">白×シルバーの上品系</option>
               <option value="neonCity">ネオン×繁華街の現代風</option>
+              <option value="gemRose">宝石・薔薇の華やか系</option>
+              <option value="japaneseModern">和モダン</option>
+              <option value="sweetClassical">スイートクラシカル</option>
+              <option value="dreamyIdol">ドリーミーアイドル</option>
             </select>
           </label>
-          <p class="hint">現在は黒×金、白×シルバー、ネオン×繁華街の3テーマを収録しています。テーマ設定は追加しやすい構成に分離しています。</p>
+          <p class="hint">黒×金、白×シルバー、ネオン、宝石・薔薇、和モダン、スイートクラシカル、ドリーミーアイドルの7テーマを収録しています。</p>
         </div>
       </section>
 
@@ -1294,6 +1298,7 @@
       blackGold: {
         name: "黒×金の王道ホスト風",
         mode: "dark",
+        overlayLimit: 0.28,
         colors: {
           background: "#070707",
           darkGray: "#171717",
@@ -1341,6 +1346,7 @@
       whiteSilver: {
         name: "白×シルバーの上品系",
         mode: "light",
+        overlayLimit: 0.24,
         colors: {
           background: "#F5F2EE",
           darkGray: "#E6E2DC",
@@ -1389,6 +1395,7 @@
         name: "ネオン×繁華街の現代風",
         mode: "dark",
         style: "neon",
+        overlayLimit: 0.22,
         colors: {
           background: "#050611",
           darkGray: "#101329",
@@ -1428,6 +1435,202 @@
           lineMain: 2.55,
           lineFine: 1.15,
           glow: 13,
+          alpha: 0.92,
+          cardScale: 0.92,
+          bottleScale: 0.96
+        }
+      },
+      gemRose: {
+        name: "宝石・薔薇の華やか系",
+        mode: "dark",
+        style: "gemRose",
+        overlayLimit: 0.26,
+        colors: {
+          background: "#12060D",
+          darkGray: "#2A0C1A",
+          backgroundEnd: "#050204",
+          gold: "#D28D80",
+          goldLight: "#FFD9D0",
+          goldDark: "#7D263E",
+          white: "#FFF7F5",
+          muted: "#E1BEC5",
+          panel: "rgba(20, 5, 12, 0.90)",
+          panelLine: "rgba(232, 154, 170, 0.62)",
+          title: "#FFD0C7",
+          subtitle: "#FFF0EE",
+          titleShadow: "rgba(122, 18, 51, 0.88)",
+          titlePlaceholder: "#D28D80",
+          catchShadow: "rgba(0, 0, 0, 0.92)",
+          panelLabel: "#E6A59B",
+          panelValueStrong: "#FFF6F2",
+          panelValueNormal: "#E4C7CA",
+          nameStroke: "rgba(35, 5, 16, 0.96)",
+          nameGlow: "rgba(170, 34, 77, 0.72)",
+          footer: "rgba(232, 202, 202, 0.78)",
+          qrBorder: "rgba(236, 164, 176, 0.84)"
+        },
+        typography: {
+          serif: "Georgia, 'Times New Roman', serif",
+          sans: "'Yu Gothic UI', 'Yu Gothic', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif"
+        },
+        layout: {
+          outerMargin: 28,
+          photo: { x: 42, y: 142, width: 816, height: 1008 },
+          header: { x: 58, y: 34, width: 784, height: 142 },
+          infoPanel: { x: 42, y: 1080, width: 816, height: 342 },
+          qrSize: 158
+        },
+        decoration: {
+          lineMain: 2.5,
+          lineFine: 1.18,
+          glow: 9,
+          alpha: 0.90,
+          cardScale: 0.92,
+          bottleScale: 0.96
+        }
+      },
+      japaneseModern: {
+        name: "和モダン",
+        mode: "dark",
+        style: "japaneseModern",
+        overlayLimit: 0.28,
+        colors: {
+          background: "#090706",
+          darkGray: "#1B1010",
+          backgroundEnd: "#020202",
+          gold: "#C99A42",
+          goldLight: "#F0D17A",
+          goldDark: "#6E2527",
+          white: "#FAF3E8",
+          muted: "#D2C0AA",
+          panel: "rgba(10, 7, 6, 0.91)",
+          panelLine: "rgba(210, 164, 75, 0.60)",
+          title: "#E7C76E",
+          subtitle: "#F7EBDD",
+          titleShadow: "rgba(72, 8, 10, 0.92)",
+          titlePlaceholder: "#C99A42",
+          catchShadow: "rgba(0, 0, 0, 0.94)",
+          panelLabel: "#D4A64E",
+          panelValueStrong: "#FFF7EB",
+          panelValueNormal: "#D8C5AE",
+          nameStroke: "rgba(20, 3, 3, 0.96)",
+          nameGlow: "rgba(132, 22, 25, 0.66)",
+          footer: "rgba(218, 200, 176, 0.78)",
+          qrBorder: "rgba(215, 171, 83, 0.84)"
+        },
+        typography: {
+          serif: "'Yu Mincho', 'Hiragino Mincho ProN', Georgia, serif",
+          sans: "'Yu Gothic UI', 'Yu Gothic', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif"
+        },
+        layout: {
+          outerMargin: 28,
+          photo: { x: 42, y: 142, width: 816, height: 1008 },
+          header: { x: 58, y: 34, width: 784, height: 142 },
+          infoPanel: { x: 42, y: 1080, width: 816, height: 342 },
+          qrSize: 158
+        },
+        decoration: {
+          lineMain: 2.45,
+          lineFine: 1.15,
+          glow: 7,
+          alpha: 0.88,
+          cardScale: 0.92,
+          bottleScale: 0.96
+        }
+      },
+      sweetClassical: {
+        name: "スイートクラシカル",
+        mode: "light",
+        style: "sweetClassical",
+        overlayLimit: 0.18,
+        colors: {
+          background: "#FAF2ED",
+          darkGray: "#EEDDD8",
+          backgroundEnd: "#E7D2CC",
+          gold: "#C9A06E",
+          goldLight: "#FFF8EF",
+          goldDark: "#A97965",
+          white: "#FFFDFC",
+          muted: "#7A6267",
+          panel: "rgba(255, 250, 247, 0.91)",
+          panelLine: "rgba(190, 139, 130, 0.62)",
+          title: "#976774",
+          subtitle: "#675057",
+          titleShadow: "rgba(255, 255, 255, 0.90)",
+          titlePlaceholder: "#B5828D",
+          catchShadow: "rgba(255, 255, 255, 0.86)",
+          panelLabel: "#A36E78",
+          panelValueStrong: "#4E3C41",
+          panelValueNormal: "#705A60",
+          nameStroke: "rgba(70, 47, 54, 0.94)",
+          nameGlow: "rgba(255, 255, 255, 0.82)",
+          footer: "rgba(112, 90, 96, 0.84)",
+          qrBorder: "rgba(190, 139, 130, 0.84)"
+        },
+        typography: {
+          serif: "Georgia, 'Times New Roman', serif",
+          sans: "'Yu Gothic UI', 'Yu Gothic', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif"
+        },
+        layout: {
+          outerMargin: 28,
+          photo: { x: 42, y: 142, width: 816, height: 1008 },
+          header: { x: 58, y: 34, width: 784, height: 142 },
+          infoPanel: { x: 42, y: 1080, width: 816, height: 342 },
+          qrSize: 158
+        },
+        decoration: {
+          lineMain: 2.35,
+          lineFine: 1.12,
+          glow: 7,
+          alpha: 0.90,
+          cardScale: 0.92,
+          bottleScale: 0.96
+        }
+      },
+      dreamyIdol: {
+        name: "ドリーミーアイドル",
+        mode: "light",
+        style: "dreamyIdol",
+        overlayLimit: 0.16,
+        colors: {
+          background: "#EEF7FF",
+          darkGray: "#F1E9FF",
+          backgroundEnd: "#E8FFF7",
+          gold: "#FF72C9",
+          goldLight: "#71E9FF",
+          goldDark: "#8C70FF",
+          white: "#FFFFFF",
+          muted: "#64677F",
+          panel: "rgba(255, 255, 255, 0.86)",
+          panelLine: "rgba(255, 114, 201, 0.62)",
+          title: "#9A64E8",
+          subtitle: "#515870",
+          titleShadow: "rgba(255, 255, 255, 0.94)",
+          titlePlaceholder: "#FF72C9",
+          catchShadow: "rgba(255, 255, 255, 0.88)",
+          panelLabel: "#C852A1",
+          panelValueStrong: "#444B68",
+          panelValueNormal: "#606780",
+          nameStroke: "rgba(72, 55, 116, 0.92)",
+          nameGlow: "rgba(255, 255, 255, 0.88)",
+          footer: "rgba(91, 97, 126, 0.82)",
+          qrBorder: "rgba(140, 112, 255, 0.76)"
+        },
+        typography: {
+          serif: "Georgia, 'Times New Roman', serif",
+          sans: "'Yu Gothic UI', 'Yu Gothic', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif"
+        },
+        layout: {
+          outerMargin: 28,
+          photo: { x: 42, y: 142, width: 816, height: 1008 },
+          header: { x: 58, y: 34, width: 784, height: 142 },
+          infoPanel: { x: 42, y: 1080, width: 816, height: 342 },
+          qrSize: 158
+        },
+        decoration: {
+          lineMain: 2.4,
+          lineFine: 1.1,
+          glow: 10,
           alpha: 0.92,
           cardScale: 0.92,
           bottleScale: 0.96
@@ -1875,8 +2078,14 @@
 
     function drawBackground(theme) {
       const { colors } = theme;
+      const style = theme.style || "classic";
       const isLight = theme.mode === "light";
-      const isNeon = theme.style === "neon";
+      const isNeon = style === "neon";
+      const isGemRose = style === "gemRose";
+      const isJapanese = style === "japaneseModern";
+      const isSweet = style === "sweetClassical";
+      const isDreamy = style === "dreamyIdol";
+
       const base = ctx.createLinearGradient(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
       base.addColorStop(0, colors.background);
       base.addColorStop(0.48, colors.darkGray);
@@ -1884,17 +2093,30 @@
       ctx.fillStyle = base;
       ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-      const glowTop = ctx.createRadialGradient(450, 90, 20, 450, 90, 520);
+      const glowTop = ctx.createRadialGradient(450, 90, 20, 450, 90, 540);
       if (isNeon) {
         glowTop.addColorStop(0, "rgba(85,246,255,0.22)");
         glowTop.addColorStop(0.38, "rgba(232,59,255,0.12)");
+      } else if (isGemRose) {
+        glowTop.addColorStop(0, "rgba(255,177,185,0.20)");
+        glowTop.addColorStop(0.42, "rgba(151,31,68,0.13)");
+      } else if (isJapanese) {
+        glowTop.addColorStop(0, "rgba(216,158,65,0.16)");
+        glowTop.addColorStop(0.42, "rgba(117,20,24,0.13)");
+      } else if (isSweet) {
+        glowTop.addColorStop(0, "rgba(255,255,255,0.90)");
+        glowTop.addColorStop(0.44, "rgba(218,164,174,0.16)");
+      } else if (isDreamy) {
+        glowTop.addColorStop(0, "rgba(255,255,255,0.94)");
+        glowTop.addColorStop(0.32, "rgba(255,114,201,0.16)");
+        glowTop.addColorStop(0.55, "rgba(113,233,255,0.12)");
       } else {
         glowTop.addColorStop(0, isLight ? "rgba(255,255,255,0.78)" : "rgba(228, 200, 117, 0.16)");
         glowTop.addColorStop(0.38, isLight ? "rgba(138,145,158,0.14)" : "rgba(126, 100, 44, 0.06)");
       }
       glowTop.addColorStop(1, "rgba(0, 0, 0, 0)");
       ctx.fillStyle = glowTop;
-      ctx.fillRect(0, 0, CANVAS_WIDTH, 620);
+      ctx.fillRect(0, 0, CANVAS_WIDTH, 650);
 
       const velvet = ctx.createLinearGradient(0, 0, CANVAS_WIDTH, 0);
       if (isNeon) {
@@ -1903,6 +2125,30 @@
         velvet.addColorStop(0.5, "rgba(232,59,255,0.045)");
         velvet.addColorStop(0.78, "rgba(0,0,0,0.10)");
         velvet.addColorStop(1, "rgba(118,87,255,0.04)");
+      } else if (isGemRose) {
+        velvet.addColorStop(0, "rgba(255,210,205,0.025)");
+        velvet.addColorStop(0.25, "rgba(70,0,22,0.10)");
+        velvet.addColorStop(0.5, "rgba(220,96,122,0.035)");
+        velvet.addColorStop(0.78, "rgba(55,0,16,0.12)");
+        velvet.addColorStop(1, "rgba(255,190,185,0.02)");
+      } else if (isJapanese) {
+        velvet.addColorStop(0, "rgba(231,199,110,0.022)");
+        velvet.addColorStop(0.24, "rgba(55,5,5,0.10)");
+        velvet.addColorStop(0.52, "rgba(132,22,25,0.035)");
+        velvet.addColorStop(0.8, "rgba(35,0,0,0.13)");
+        velvet.addColorStop(1, "rgba(231,199,110,0.018)");
+      } else if (isSweet) {
+        velvet.addColorStop(0, "rgba(255,255,255,0.46)");
+        velvet.addColorStop(0.25, "rgba(185,125,138,0.07)");
+        velvet.addColorStop(0.5, "rgba(255,255,255,0.26)");
+        velvet.addColorStop(0.78, "rgba(185,125,138,0.08)");
+        velvet.addColorStop(1, "rgba(255,255,255,0.40)");
+      } else if (isDreamy) {
+        velvet.addColorStop(0, "rgba(113,233,255,0.13)");
+        velvet.addColorStop(0.25, "rgba(255,255,255,0.34)");
+        velvet.addColorStop(0.5, "rgba(255,114,201,0.10)");
+        velvet.addColorStop(0.76, "rgba(255,255,255,0.32)");
+        velvet.addColorStop(1, "rgba(140,112,255,0.12)");
       } else if (isLight) {
         velvet.addColorStop(0, "rgba(255,255,255,0.38)");
         velvet.addColorStop(0.22, "rgba(138,145,158,0.08)");
@@ -1936,13 +2182,12 @@
         ctx.fillRect(500, 300, 400, 850);
 
         ctx.lineCap = "round";
-        const lightBars = [
+        [
           { x: 63, y: 250, h: 330, color: "rgba(85,246,255,0.22)" },
           { x: 91, y: 350, h: 220, color: "rgba(85,246,255,0.10)" },
           { x: 808, y: 280, h: 390, color: "rgba(232,59,255,0.20)" },
           { x: 838, y: 410, h: 250, color: "rgba(118,87,255,0.12)" }
-        ];
-        lightBars.forEach(bar => {
+        ].forEach(bar => {
           ctx.strokeStyle = bar.color;
           ctx.lineWidth = 3;
           ctx.shadowColor = bar.color;
@@ -1952,25 +2197,94 @@
           ctx.lineTo(bar.x, bar.y + bar.h);
           ctx.stroke();
         });
-
-        ctx.globalAlpha = 0.26;
-        [
-          [118, 260, 5, colors.goldLight], [780, 225, 4, colors.gold],
-          [92, 720, 3, colors.gold], [812, 880, 5, colors.goldLight],
-          [738, 410, 3, colors.goldDark], [164, 930, 4, colors.goldLight]
-        ].forEach(([x, y, r, color]) => {
-          ctx.fillStyle = color;
-          ctx.shadowColor = color;
-          ctx.shadowBlur = 18;
+        ctx.restore();
+      } else if (isGemRose) {
+        ctx.save();
+        ctx.globalCompositeOperation = "screen";
+        const roseGlow = ctx.createRadialGradient(760, 410, 8, 760, 410, 300);
+        roseGlow.addColorStop(0, "rgba(214,75,111,0.18)");
+        roseGlow.addColorStop(1, "rgba(214,75,111,0)");
+        ctx.fillStyle = roseGlow;
+        ctx.fillRect(430, 100, 470, 700);
+        [[78,270,4],[818,245,5],[116,910,3],[790,840,4],[735,1180,3]].forEach(([x,y,r]) => {
+          ctx.fillStyle = "rgba(255,205,200,0.42)";
+          ctx.shadowColor = "rgba(255,110,145,0.68)";
+          ctx.shadowBlur = 14;
           ctx.beginPath();
-          ctx.arc(x, y, r, 0, Math.PI * 2);
+          ctx.moveTo(x, y-r*2);
+          ctx.lineTo(x+r, y);
+          ctx.lineTo(x, y+r*2);
+          ctx.lineTo(x-r, y);
+          ctx.closePath();
+          ctx.fill();
+        });
+        ctx.restore();
+      } else if (isJapanese) {
+        ctx.save();
+        const sun = ctx.createRadialGradient(710, 235, 12, 710, 235, 165);
+        sun.addColorStop(0, "rgba(142,24,28,0.20)");
+        sun.addColorStop(0.7, "rgba(103,12,17,0.09)");
+        sun.addColorStop(1, "rgba(103,12,17,0)");
+        ctx.fillStyle = sun;
+        ctx.fillRect(520, 40, 380, 390);
+        ctx.globalAlpha = 0.10;
+        ctx.strokeStyle = "#E5C46B";
+        ctx.lineWidth = 1.1;
+        for (let row = 0; row < 5; row += 1) {
+          const y = 1180 + row * 34;
+          ctx.beginPath();
+          ctx.arc(80 + row * 16, y, 105, Math.PI * 1.12, Math.PI * 1.88);
+          ctx.arc(245 + row * 16, y, 105, Math.PI * 1.12, Math.PI * 1.88);
+          ctx.stroke();
+        }
+        ctx.restore();
+      } else if (isSweet) {
+        ctx.save();
+        ctx.globalAlpha = 0.085;
+        ctx.strokeStyle = "#AD7A84";
+        ctx.lineWidth = 1;
+        for (let y = -40; y < CANVAS_HEIGHT + 80; y += 76) {
+          for (let x = -40; x < CANVAS_WIDTH + 80; x += 76) {
+            ctx.beginPath();
+            ctx.moveTo(x, y + 18);
+            ctx.quadraticCurveTo(x + 18, y, x + 36, y + 18);
+            ctx.quadraticCurveTo(x + 18, y + 36, x, y + 18);
+            ctx.stroke();
+          }
+        }
+        ctx.restore();
+      } else if (isDreamy) {
+        ctx.save();
+        ctx.globalCompositeOperation = "screen";
+        [
+          [95, 420, 255, "rgba(113,233,255,0.22)"],
+          [820, 610, 300, "rgba(255,114,201,0.21)"],
+          [420, 1230, 300, "rgba(140,112,255,0.16)"]
+        ].forEach(([x, y, radius, color]) => {
+          const glow = ctx.createRadialGradient(x, y, 8, x, y, radius);
+          glow.addColorStop(0, color);
+          glow.addColorStop(1, "rgba(255,255,255,0)");
+          ctx.fillStyle = glow;
+          ctx.fillRect(x-radius, y-radius, radius*2, radius*2);
+        });
+        [[90,250,5],[806,220,6],[120,860,4],[790,920,5],[700,1270,4],[210,1220,3]].forEach(([x,y,r]) => {
+          ctx.fillStyle = "rgba(255,255,255,0.72)";
+          ctx.shadowColor = "rgba(255,114,201,0.52)";
+          ctx.shadowBlur = 12;
+          ctx.beginPath();
+          ctx.moveTo(x, y-r*2);
+          ctx.lineTo(x+r, y);
+          ctx.lineTo(x, y+r*2);
+          ctx.lineTo(x-r, y);
+          ctx.closePath();
           ctx.fill();
         });
         ctx.restore();
       }
 
       ctx.save();
-      ctx.globalAlpha = isNeon ? 0.075 : (isLight ? 0.08 : 0.06);
+      const patternAlpha = isNeon ? 0.075 : (isDreamy ? 0.045 : (isSweet ? 0.04 : (isLight ? 0.08 : 0.06)));
+      ctx.globalAlpha = patternAlpha;
       ctx.strokeStyle = colors.goldDark;
       ctx.lineWidth = 1;
       for (let i = -CANVAS_HEIGHT; i < CANVAS_WIDTH; i += 54) {
@@ -2666,7 +2980,15 @@
       ctx.stroke();
 
       const innerGlow = ctx.createLinearGradient(panel.x, panel.y, panel.x + panel.width, panel.y);
-      if (theme.mode === "light") {
+      if (theme.style === "dreamyIdol") {
+        innerGlow.addColorStop(0, "rgba(113,233,255,0.14)");
+        innerGlow.addColorStop(0.5, "rgba(255,255,255,0.28)");
+        innerGlow.addColorStop(1, "rgba(255,114,201,0.15)");
+      } else if (theme.style === "sweetClassical") {
+        innerGlow.addColorStop(0, "rgba(255,255,255,0.34)");
+        innerGlow.addColorStop(0.5, "rgba(207,150,160,0.10)");
+        innerGlow.addColorStop(1, "rgba(255,255,255,0.30)");
+      } else if (theme.mode === "light") {
         innerGlow.addColorStop(0, "rgba(255,255,255,0.22)");
         innerGlow.addColorStop(0.5, "rgba(138,145,158,0.08)");
         innerGlow.addColorStop(1, "rgba(255,255,255,0.2)");
@@ -2674,6 +2996,14 @@
         innerGlow.addColorStop(0, "rgba(85,246,255,0.08)");
         innerGlow.addColorStop(0.48, "rgba(232,59,255,0.13)");
         innerGlow.addColorStop(1, "rgba(118,87,255,0.08)");
+      } else if (theme.style === "gemRose") {
+        innerGlow.addColorStop(0, "rgba(255,203,198,0.05)");
+        innerGlow.addColorStop(0.5, "rgba(205,72,108,0.13)");
+        innerGlow.addColorStop(1, "rgba(255,203,198,0.05)");
+      } else if (theme.style === "japaneseModern") {
+        innerGlow.addColorStop(0, "rgba(231,199,110,0.04)");
+        innerGlow.addColorStop(0.5, "rgba(130,22,25,0.12)");
+        innerGlow.addColorStop(1, "rgba(231,199,110,0.04)");
       } else {
         innerGlow.addColorStop(0, "rgba(228, 200, 117, 0.03)");
         innerGlow.addColorStop(0.5, "rgba(228, 200, 117, 0.11)");
@@ -2943,7 +3273,11 @@
     const decorationThemeFolders = {
       blackGold: "blackgold",
       whiteSilver: "whitesilver",
-      neonCity: "neon"
+      neonCity: "neon",
+      gemRose: "gemrose",
+      japaneseModern: "japanesemodern",
+      sweetClassical: "sweetclassical",
+      dreamyIdol: "dreamyidol"
     };
 
     const decorationCatalog = {
@@ -2970,7 +3304,7 @@
     ];
 
     const decorationImages = new Map();
-    let decorationLoadPromise = null;
+    const decorationThemeLoadPromises = new Map();
     let decorationLoadError = "";
 
     function decorationAssetKey(themeKey, decorationKey) {
@@ -2999,24 +3333,32 @@
       elements.decorationStatus.classList.toggle("error", isError);
     }
 
-    function preloadDecorationImages() {
-      if (decorationLoadPromise) return decorationLoadPromise;
+    function preloadDecorationImages(themeKey = state.theme) {
+      if (decorationThemeLoadPromises.has(themeKey)) {
+        return decorationThemeLoadPromises.get(themeKey);
+      }
       setDecorationStatus("装飾画像を読み込んでいます…");
-      const jobs = Object.keys(decorationThemeFolders).flatMap(themeKey =>
-        Object.keys(decorationCatalog).map(decorationKey => loadDecorationImage(themeKey, decorationKey))
+      const jobs = Object.keys(decorationCatalog).map(decorationKey =>
+        loadDecorationImage(themeKey, decorationKey)
       );
-      decorationLoadPromise = Promise.all(jobs)
+      const loadPromise = Promise.all(jobs)
         .then(() => {
           decorationLoadError = "";
-          setDecorationStatus("装飾画像の読み込みが完了しました。");
-          renderCanvas();
+          if (themeKey === state.theme) {
+            setDecorationStatus("装飾画像の読み込みが完了しました。");
+            renderCanvas();
+          }
         })
         .catch(error => {
+          decorationThemeLoadPromises.delete(themeKey);
           decorationLoadError = error.message || "不明な画像";
-          setDecorationStatus(`装飾画像を読み込めませんでした：${decorationLoadError}`, true);
+          if (themeKey === state.theme) {
+            setDecorationStatus(`装飾画像を読み込めませんでした：${decorationLoadError}`, true);
+          }
           throw error;
         });
-      return decorationLoadPromise;
+      decorationThemeLoadPromises.set(themeKey, loadPromise);
+      return loadPromise;
     }
 
     async function ensureSelectedDecorationsReady() {
@@ -3257,18 +3599,15 @@
 
     elements.themeSelect.addEventListener("change", event => {
       state.theme = event.target.value;
-      if (state.theme === "whiteSilver" && state.overlayOpacity > 0.24) {
-        state.overlayOpacity = 0.24;
-        elements.overlayOpacity.value = "24";
-        updateRangeLabels();
-      } else if (state.theme === "neonCity" && state.overlayOpacity > 0.22) {
-        state.overlayOpacity = 0.22;
-        elements.overlayOpacity.value = "22";
+      const overlayLimit = themes[state.theme].overlayLimit;
+      if (Number.isFinite(overlayLimit) && state.overlayOpacity > overlayLimit) {
+        state.overlayOpacity = overlayLimit;
+        elements.overlayOpacity.value = String(Math.round(overlayLimit * 100));
         updateRangeLabels();
       }
       syncTextStyleControls();
       renderCanvas();
-      ensureSelectedDecorationsReady().then(() => {
+      preloadDecorationImages(state.theme).then(() => {
         setDecorationStatus("装飾画像の読み込みが完了しました。");
         renderCanvas();
       }).catch(error => setDecorationStatus(`装飾画像を読み込めませんでした：${error.message}`, true));
@@ -3499,7 +3838,7 @@
     setupTextStyleControls();
     syncControlsFromState();
     renderCanvas();
-    preloadDecorationImages().catch(() => {});
+    preloadDecorationImages(state.theme).catch(() => {});
     ensureSelectedFontsReady().then(renderCanvas);
   </script>
 </body>
