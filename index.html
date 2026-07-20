@@ -3290,12 +3290,57 @@
           { x: 642, y: 82, width: 232, height: 232, mirrorX: true }
         ]
       },
-      tarotCards: { file: "tarot-cards.png", x: -8, bottom: 1092, width: 316, height: 316, layer: "foreground" },
+      tarotCards: {
+        file: "tarot-cards.png",
+        x: -8,
+        bottom: 1092,
+        width: 316,
+        height: 316,
+        layer: "foreground",
+        alignVisibleBottomToInfoPanelTop: true,
+        visibleBottomContactOffset: 4
+      },
       bottles: { file: "bottles.png", x: 620, y: 930, width: 271, height: 271, layer: "foreground" },
-      guitarPick: { file: "guitar-pick.png", x: -8, bottom: 1092, width: 246, height: 246, layer: "foreground" },
-      violin: { file: "violin.png", x: -8, bottom: 1092, width: 255, height: 383, layer: "foreground" },
-      teddyBear: { file: "teddy-bear.png", x: -8, bottom: 1092, width: 262, height: 262, layer: "foreground" },
-      cuteHearts: { file: "cute-hearts.png", x: -8, bottom: 1092, width: 240, height: 240, layer: "foreground" }
+      guitarPick: {
+        file: "guitar-pick.png",
+        x: -8,
+        bottom: 1092,
+        width: 246,
+        height: 246,
+        layer: "foreground",
+        alignVisibleBottomToInfoPanelTop: true,
+        visibleBottomContactOffset: 4
+      },
+      violin: {
+        file: "violin.png",
+        x: -8,
+        bottom: 1092,
+        width: 255,
+        height: 383,
+        layer: "foreground",
+        alignVisibleBottomToInfoPanelTop: true,
+        visibleBottomContactOffset: 4
+      },
+      teddyBear: {
+        file: "teddy-bear.png",
+        x: -8,
+        bottom: 1092,
+        width: 262,
+        height: 262,
+        layer: "foreground",
+        alignVisibleBottomToInfoPanelTop: true,
+        visibleBottomContactOffset: 4
+      },
+      cuteHearts: {
+        file: "cute-hearts.png",
+        x: -8,
+        bottom: 1092,
+        width: 240,
+        height: 240,
+        layer: "foreground",
+        alignVisibleBottomToInfoPanelTop: true,
+        visibleBottomContactOffset: 4
+      }
     };
 
     const decorationExclusiveGroups = [
@@ -3304,8 +3349,52 @@
     ];
 
     const decorationImages = new Map();
+    const decorationVisibleBounds = new Map();
     const decorationThemeLoadPromises = new Map();
     let decorationLoadError = "";
+
+    function calculateOpaqueBounds(image) {
+      const sourceWidth = image.naturalWidth || image.width;
+      const sourceHeight = image.naturalHeight || image.height;
+      if (!sourceWidth || !sourceHeight) {
+        return { left: 0, top: 0, right: sourceWidth || 0, bottom: sourceHeight || 0 };
+      }
+
+      const measureCanvas = document.createElement("canvas");
+      measureCanvas.width = sourceWidth;
+      measureCanvas.height = sourceHeight;
+      const measureContext = measureCanvas.getContext("2d", { willReadFrequently: true });
+      measureContext.clearRect(0, 0, sourceWidth, sourceHeight);
+      measureContext.drawImage(image, 0, 0);
+
+      const { data } = measureContext.getImageData(0, 0, sourceWidth, sourceHeight);
+      let minX = sourceWidth;
+      let minY = sourceHeight;
+      let maxX = -1;
+      let maxY = -1;
+
+      for (let y = 0; y < sourceHeight; y += 1) {
+        for (let x = 0; x < sourceWidth; x += 1) {
+          const alpha = data[(y * sourceWidth + x) * 4 + 3];
+          if (alpha === 0) continue;
+          if (x < minX) minX = x;
+          if (y < minY) minY = y;
+          if (x > maxX) maxX = x;
+          if (y > maxY) maxY = y;
+        }
+      }
+
+      if (maxX === -1 || maxY === -1) {
+        return { left: 0, top: 0, right: sourceWidth, bottom: sourceHeight };
+      }
+
+      return {
+        left: minX,
+        top: minY,
+        right: maxX + 1,
+        bottom: maxY + 1
+      };
+    }
 
     function decorationAssetKey(themeKey, decorationKey) {
       return `${themeKey}:${decorationKey}`;
@@ -3321,6 +3410,7 @@
         const image = new Image();
         image.onload = () => {
           decorationImages.set(key, image);
+          decorationVisibleBounds.set(key, calculateOpaqueBounds(image));
           resolve(image);
         };
         image.onerror = () => reject(new Error(`${folder}/${config.file}`));
@@ -3382,9 +3472,21 @@
           }];
 
       placements.forEach(placement => {
-        const drawY = Number.isFinite(placement.y)
+        let drawY = Number.isFinite(placement.y)
           ? placement.y
           : placement.bottom - placement.height;
+
+        if (config.alignVisibleBottomToInfoPanelTop && !Number.isFinite(placement.y)) {
+          const bounds = decorationVisibleBounds.get(decorationAssetKey(themeKey, decorationKey));
+          const theme = themes[themeKey];
+          const infoPanelTop = theme?.layout?.infoPanel?.y;
+          if (bounds && Number.isFinite(infoPanelTop)) {
+            const sourceHeight = image.naturalHeight || image.height || placement.height;
+            const visibleBottomRatio = bounds.bottom / sourceHeight;
+            const targetVisibleBottom = infoPanelTop + (config.visibleBottomContactOffset || 0);
+            drawY = targetVisibleBottom - placement.height * visibleBottomRatio;
+          }
+        }
 
         ctx.save();
         ctx.imageSmoothingEnabled = true;
