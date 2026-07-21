@@ -3230,12 +3230,13 @@
         ctx.fillText(row.label, textLeft, y);
 
         const labelWidth = 124;
-        const valueMaxWidth = maxTextWidth - labelWidth;
+        const valueGap = 18;
+        const valueMaxWidth = maxTextWidth - labelWidth - valueGap;
         const baseSize = row.strong ? 29 : 25;
         const minSize = row.strong ? 20 : 18;
         const valueSize = fitTextParts(row.parts, valueMaxWidth, baseSize, minSize, theme);
         ctx.fillStyle = row.strong ? (colors.panelValueStrong || colors.white) : (colors.panelValueNormal || colors.muted);
-        drawTextParts(row.parts, textLeft + labelWidth, y, valueSize, ctx.fillStyle, theme);
+        drawTextParts(row.parts, textLeft + labelWidth + valueGap, y, valueSize, ctx.fillStyle, theme);
         ctx.restore();
       });
     }
