@@ -1132,6 +1132,12 @@
             <label class="choice-card"><input class="decoration-check" type="checkbox" value="violin">ヴァイオリン</label>
             <label class="choice-card"><input class="decoration-check" type="checkbox" value="teddyBear">テディベア</label>
             <label class="choice-card"><input class="decoration-check" type="checkbox" value="cuteHearts">ハート</label>
+            <label class="choice-card"><input class="decoration-check" type="checkbox" value="roseBouquet">薔薇の花束</label>
+            <label class="choice-card"><input class="decoration-check" type="checkbox" value="giftBox">ギフトボックス</label>
+            <label class="choice-card"><input class="decoration-check" type="checkbox" value="cat">猫</label>
+            <label class="choice-card"><input class="decoration-check" type="checkbox" value="dog">犬</label>
+            <label class="choice-card"><input class="decoration-check" type="checkbox" value="lizard">トカゲ</label>
+            <label class="choice-card"><input class="decoration-check" type="checkbox" value="bird">鳥</label>
           </div>
           <p id="decorationStatus" class="hint form-status" aria-live="polite">装飾画像を読み込んでいます…</p>
         </div>
@@ -1704,7 +1710,13 @@
         guitarPick: false,
         violin: false,
         teddyBear: false,
-        cuteHearts: false
+        cuteHearts: false,
+        roseBouquet: false,
+        giftBox: false,
+        cat: false,
+        dog: false,
+        lizard: false,
+        bird: false
       }
     });
 
@@ -3282,6 +3294,7 @@
 
     const decorationCatalog = {
       flourish: { file: "flourish.png", x: 0, y: 0, width: 900, height: 1500, layer: "frame" },
+
       chandelier: {
         file: "chandelier.png",
         layer: "foreground",
@@ -3290,6 +3303,7 @@
           { x: 642, y: 82, width: 232, height: 232, mirrorX: true }
         ]
       },
+
       tarotCards: {
         file: "tarot-cards.png",
         x: -8,
@@ -3300,7 +3314,16 @@
         alignVisibleBottomToInfoPanelTop: true,
         visibleBottomContactOffset: 4
       },
-      bottles: { file: "bottles.png", x: 620, y: 930, width: 271, height: 271, layer: "foreground" },
+
+      bottles: {
+        file: "bottles.png",
+        x: 620,
+        y: 930,
+        width: 271,
+        height: 271,
+        layer: "foreground"
+      },
+
       guitarPick: {
         file: "guitar-pick.png",
         x: -8,
@@ -3311,6 +3334,7 @@
         alignVisibleBottomToInfoPanelTop: true,
         visibleBottomContactOffset: 4
       },
+
       violin: {
         file: "violin.png",
         x: -8,
@@ -3321,6 +3345,7 @@
         alignVisibleBottomToInfoPanelTop: true,
         visibleBottomContactOffset: 4
       },
+
       teddyBear: {
         file: "teddy-bear.png",
         x: -8,
@@ -3331,6 +3356,7 @@
         alignVisibleBottomToInfoPanelTop: true,
         visibleBottomContactOffset: 4
       },
+
       cuteHearts: {
         file: "cute-hearts.png",
         x: -8,
@@ -3340,12 +3366,77 @@
         layer: "foreground",
         alignVisibleBottomToInfoPanelTop: true,
         visibleBottomContactOffset: 4
+      },
+
+      roseBouquet: {
+        file: "rose-bouquet.png",
+        x: -8,
+        bottom: 1092,
+        width: 288,
+        height: 288,
+        layer: "foreground",
+        alignVisibleBottomToInfoPanelTop: true,
+        visibleBottomContactOffset: 4
+      },
+
+      giftBox: {
+        file: "gift-box.png",
+        x: 636,
+        y: 944,
+        width: 244,
+        height: 244,
+        layer: "foreground"
+      },
+
+      cat: {
+        file: "cat.png",
+        x: -8,
+        bottom: 1092,
+        width: 272,
+        height: 272,
+        layer: "foreground",
+        alignVisibleBottomToInfoPanelTop: true,
+        visibleBottomContactOffset: 4
+      },
+
+      dog: {
+        file: "dog.png",
+        x: -8,
+        bottom: 1092,
+        width: 282,
+        height: 282,
+        layer: "foreground",
+        alignVisibleBottomToInfoPanelTop: true,
+        visibleBottomContactOffset: 4
+      },
+
+      lizard: {
+        file: "lizard.png",
+        x: -8,
+        bottom: 1092,
+        width: 292,
+        height: 228,
+        layer: "foreground",
+        alignVisibleBottomToInfoPanelTop: true,
+        visibleBottomContactOffset: 4
+      },
+
+      bird: {
+        file: "bird.png",
+        x: -8,
+        bottom: 1092,
+        width: 260,
+        height: 260,
+        layer: "foreground",
+        alignVisibleBottomToInfoPanelTop: true,
+        visibleBottomContactOffset: 4
       }
     };
 
     const decorationExclusiveGroups = [
-      ["tarotCards", "guitarPick", "violin", "cuteHearts", "teddyBear"],
-      ["flourish", "chandelier"]
+      ["tarotCards", "guitarPick", "violin", "cuteHearts", "teddyBear", "roseBouquet", "cat", "dog", "lizard", "bird"],
+      ["flourish", "chandelier"],
+      ["bottles", "giftBox"]
     ];
 
     const decorationImages = new Map();
