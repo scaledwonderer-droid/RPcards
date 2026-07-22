@@ -1134,6 +1134,8 @@
             <label class="choice-card"><input class="decoration-check" type="checkbox" value="cuteHearts">ハート</label>
             <label class="choice-card"><input class="decoration-check" type="checkbox" value="roseBouquet">薔薇の花束</label>
             <label class="choice-card"><input class="decoration-check" type="checkbox" value="giftBox">ギフトボックス</label>
+            <label class="choice-card"><input class="decoration-check" type="checkbox" value="cafeSet">カフェ系</label>
+            <label class="choice-card"><input class="decoration-check" type="checkbox" value="artSet">絵画・写真系</label>
             <label class="choice-card"><input class="decoration-check" type="checkbox" value="cat">猫</label>
             <label class="choice-card"><input class="decoration-check" type="checkbox" value="dog">犬</label>
             <label class="choice-card"><input class="decoration-check" type="checkbox" value="lizard">トカゲ</label>
@@ -1713,6 +1715,8 @@
         cuteHearts: false,
         roseBouquet: false,
         giftBox: false,
+        cafeSet: false,
+        artSet: false,
         cat: false,
         dog: false,
         lizard: false,
@@ -3389,6 +3393,24 @@
         layer: "foreground"
       },
 
+      cafeSet: {
+        file: "cafe-set.png",
+        x: 620,
+        y: 930,
+        width: 271,
+        height: 271,
+        layer: "foreground"
+      },
+
+      artSet: {
+        file: "art-set.png",
+        x: 620,
+        y: 930,
+        width: 271,
+        height: 271,
+        layer: "foreground"
+      },
+
       cat: {
         file: "cat.png",
         x: -8,
@@ -3437,7 +3459,7 @@
     const decorationExclusiveGroups = [
       ["tarotCards", "guitarPick", "violin", "cuteHearts", "teddyBear", "roseBouquet", "cat", "dog", "lizard", "bird"],
       ["flourish", "chandelier"],
-      ["bottles", "giftBox"]
+      ["bottles", "giftBox", "cafeSet", "artSet"]
     ];
 
     const decorationImages = new Map();
